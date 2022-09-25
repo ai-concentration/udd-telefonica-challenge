@@ -1,0 +1,43 @@
+1. Title: Phone Localization Dataset
+
+2. Sources:
+   (a) Creator: Instituto Data Science UDD
+   (b) Donors: Telefonica Movistar Chile
+   (c) Date: September 2022
+
+3. Future Usage:
+
+   This dataset will used to estimate the travels (origin-destiny) of 
+   users from the transport system in the city of Santiago (Metropolitan 
+   region of Chile). In other words, this dataset will be procesed to 
+   convert into movility information of people in the zone.
+
+4. Relevant Information Paragraph:
+
+   Phone Localization Dataset is derived from the public service of
+   mobile phones, Movistar Chile, in the city of Santiago de Chile.
+   It is important to mention about the anonimate process standarization 
+   and the null information from the phone users, this according the 
+   regulations in force due to personal data and the protect of privacity. 
+
+   . User localization        Phone and connecting information
+   . . PHONE_ID               Anonimated identificator of the phone
+   . . timestamp              Hour information of the connection
+   . . bts_id                 Antena indentificator connected
+   . . lat                    Latitude value of the ubication
+   . . lon                    Longitude value of the ubication
+
+   This database may be used for models of movility information from 
+   January 2021 to 2022.
+
+5. Number of Instances: 49618131
+
+6. Number of Attributes: 5
+
+7. Attribute Values:
+
+   PHONE_ID      object         Anonimated identificator of the phone
+   timestamp     object         Hour information of the connection
+   bts_id        object         Antena indentificator connected
+   lat           float64        Latitude value of the ubication
+   lon           float64        Longitude value of the ubication
