@@ -1,4 +1,4 @@
 data/
 .env/
 .ipynb_checkpoints/
-keys.txt
+.keys
