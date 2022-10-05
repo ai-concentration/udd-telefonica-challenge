@@ -11,9 +11,9 @@ This file contains:
 How to run comunas.py
 
 - You need to install all the needed dependencies, you can do it by runing:
-```sh
-		!pip install -r"requirements.txt" #(dont forget to put requirements.txt file in the same folder)
-		```
+```
+!pip install -r"requirements.txt" #(dont forget to put requirements.txt file in the same folder)
+```
 - You must have the "reverse-geocoding-responses" folder as a subfolder so the script can take the information
 	of the antenna from it
 - You must have the dataset with the whole data in the same folder
