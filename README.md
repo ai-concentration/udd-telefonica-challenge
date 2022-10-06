@@ -3,12 +3,12 @@
 ## Momento de Retroalimentación: Reto Metodología 
 Dentro del folder llamado Reto2 se encuentra:
 - To do list:
-		- Contiene la lista de las tareas realizadaas y por realizar para el proyecto. Nos da información como la cantidad de horas que tomó hacer la tarea,
+	- Contiene la lista de las tareas realizadaas y por realizar para el proyecto. Nos da información como la cantidad de horas que tomó hacer la tarea,
 		fecha planeada, fecha en la que se completó, entre otra información útil. Tambien incluye dos graficas(en hojas diferentes) en las que podemos
 		comparar el costo planeado de la actividad contra el costo real en horas (TablaDinámica2) y comparar el avance de poryecto que se tiene planeado
 		contra el avance real hasta el momento(TablaDinámica1)
 - Business Understanding:
-		- Contiene información que resulta relevante dentro del reto,como datos sobre el socio formador, los recursos con los que el equipo cuenta, 
+	- Contiene información que resulta relevante dentro del reto,como datos sobre el socio formador, los recursos con los que el equipo cuenta, 
 		software que se estará usando para la solución del reto. 
 - Este folder también contiene algunos archivos auxiliares generado para el manejo de datos
 	
