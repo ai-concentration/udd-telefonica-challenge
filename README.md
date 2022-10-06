@@ -38,9 +38,9 @@ How to run comunas.py
 -------------------------------------------------------------------------------------------------------------------------------------------------------
 ## Functions_and_visualization.ipynb
 
-Contiene 2 funciones que esperamos resulten útiles para generar la matriz origen destino
-- Función que ayuda a conocer la distancia en Kilometros entre 2 puntos dados en coordenadas. 
-- Función que recibe una coordenada "coor" y una distancia "d" y devuelve 3 puntos que se encuentran a "d" kilometros del punto "coor"
-Contiene alguna visualizaciones básicas para poder comenzar a comprender los datos
-- Comportamiento sobre el tiempo de las 3 antenas más concurridas
-- Se revisa que no hayan outliers, checando que no los datos de coordenadas fuera del rango esperado.
+- Contiene 2 funciones que esperamos resulten útiles para generar la matriz origen destino
+	- Función que ayuda a conocer la distancia en Kilometros entre 2 puntos dados en coordenadas. 
+	- Función que recibe una coordenada "coor" y una distancia "d" y devuelve 3 puntos que se encuentran a "d" kilometros del punto "coor"
+- Contiene alguna visualizaciones básicas para poder comenzar a comprender los datos
+	- Comportamiento sobre el tiempo de las 3 antenas más concurridas
+	- Se revisa que no hayan outliers, checando que no los datos de coordenadas fuera del rango esperado.
