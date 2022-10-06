@@ -49,10 +49,21 @@ for key in phone_id_route.keys():
     
 print("Done!")
 
+# Create directory to store JSON files
+JSON_DIR = Path("json")
+
+try:
+    os.mkdir(JSON_DIR)
+except FileExistsError:
+    print("Directory already exists")
+except:
+    # Abort program in case other exceptions occur
+    raise Exception("Directory could not be created")
+
 # Store defaultdict in JSON file
 print("Storing routes in JSON file...")
 
-with open("phone_id_route.json", "w") as f:
+with open(JSON_DIR / "phone_id_route.json", "w") as f:
     json.dump(phone_id_route, f)
     
 print("Done!")
