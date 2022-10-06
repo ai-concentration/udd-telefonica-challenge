@@ -1,6 +1,7 @@
 # udd-telefonica-challenge
 -----------------------------------------------------------------------------------------------------------------------------------------------
 ## Momento de Retroalimentación: Reto Metodología 
+https://drive.google.com/drive/folders/1p9R4YdBi9gdW8mukZyk7JRWFNDUAqrAt?usp=sharing
 Dentro del folder llamado Reto2 se encuentra:
 - To do list:
 	- Contiene la lista de las tareas realizadaas y por realizar para el proyecto. Nos da información como la cantidad de horas que tomó hacer la tarea,
