@@ -63,7 +63,7 @@ except:
 # Store defaultdict in JSON file
 print("Storing routes in JSON file...")
 
-with open(JSON_DIR / "phone_id_route.json", "w") as f:
+with open(JSON_DIR / "routes.json", "w") as f:
     json.dump(phone_id_route, f)
     
 print("Done!")

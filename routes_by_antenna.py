@@ -8,7 +8,7 @@ JSON_DIR = Path("json")
 # Load JSON file
 routes = None
 
-with open(JSON_DIR / "phone_id_route.json", "r") as f:
+with open(JSON_DIR / "routes.json", "r") as f:
     routes = json.load(f)
 
 from collections import defaultdict
@@ -66,7 +66,7 @@ except:
 # Store routes by antenna in JSON file
 print("Storing routes by antenna in JSON file...")
 
-with open(JSON_DIR / "phone_id_routes_clean.json", "w") as f:
+with open(JSON_DIR / "routes_by_antenna.json", "w") as f:
     json.dump(routes_by_antenna, f)
     
 print("Done!")
