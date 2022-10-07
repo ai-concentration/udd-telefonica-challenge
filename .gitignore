@@ -4,3 +4,5 @@ data/
 .keys
 reverse-geocoding-responses/
 json/
+*.json
+*.csv
