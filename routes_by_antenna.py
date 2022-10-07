@@ -3,7 +3,7 @@ import json
 from pathlib import Path
 
 # JSON files are stored in json dir
-JSON_DIR = Path("json")
+JSON_DIR = Path("json/routes")
 
 # Load JSON file
 routes = None

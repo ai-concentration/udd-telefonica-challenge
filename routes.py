@@ -50,7 +50,7 @@ for key in phone_id_route.keys():
 print("Done!")
 
 # Create directory to store JSON files
-JSON_DIR = Path("json")
+JSON_DIR = Path("json/routes")
 
 try:
     os.mkdir(JSON_DIR)
