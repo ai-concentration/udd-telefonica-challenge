@@ -67,6 +67,6 @@ except:
 print("Storing routes by antenna in JSON file...")
 
 with open(JSON_DIR / "phone_id_routes_clean.json", "w") as f:
-    json.dump(data_clean, f)
+    json.dump(routes_by_antenna, f)
     
 print("Done!")
