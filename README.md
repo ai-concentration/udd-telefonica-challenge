@@ -45,3 +45,14 @@ How to run comunas.py
 - Contiene alguna visualizaciones básicas para poder comenzar a comprender los datos
 	- Comportamiento sobre el tiempo de las 3 antenas más concurridas
 	- Se revisa que no hayan outliers, checando que no los datos de coordenadas fuera del rango esperado.
+
+# Conda setup
+1. Install a distribution of Anaconda or Miniconda
+2. Create conda environment from `environment.yml`:
+	```sh
+	conda env create -f environment.yml
+	```
+3. Activate environment:
+	```sh
+	conda activate udd-telefonica-challenge
+	```
