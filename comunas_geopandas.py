@@ -2,15 +2,16 @@ import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
 
+from pathlib import Path
+
 #load tele data
-teledata_location = 'H:\\OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey\\MachineLearning_Extern\\ClassContent\\Reto\\Matrices de Viaje para Santiago Chile\\DataSet\\'
-df = pd.read_csv(teledata_location + '20210101_RM.csv')  
+DATA_DIR = Path("data")
+df = pd.read_csv(DATA_DIR / 'data.csv')  
 print('finish loading tele data')
 
-
 #load map data
-map_loc = 'H:\\OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey\\MachineLearning_Extern\\ClassContent\\Reto\\Actividades\\R13\\'
-gdf = gpd.read_file(map_loc + "COMUNA_C17.shp")
+MAP_LOC = DATA_DIR / Path("santiago-chile-shape-files")
+gdf = gpd.read_file(MAP_LOC / "COMUNA_C17.shp")
 print('finish loading map data')
 
 #get the list of bts_id and phone_id
@@ -54,4 +55,4 @@ for count_comuna in range(gdf['NOM_COMUNA'].count()):
 
 print('Finish locate conmas')
 
-df_bts_comuna.to_csv('bts_comuna.csv')
+df_bts_comuna.to_csv(DATA_DIR / 'bts_comuna.csv')
