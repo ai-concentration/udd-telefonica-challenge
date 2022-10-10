@@ -49,7 +49,8 @@ for count_comuna in range(gdf['NOM_COMUNA'].count()):
         bts_loc = Point(lon, lat)
         geo = gdf['geometry'][count_comuna]
         if(geo.contains(bts_loc)):
-            df_bts_comuna['comuna'][count] = comuna
+            #df_bts_comuna['comuna'][count] = comuna
+            df_bts_comuna.iloc[count, df_bts_comuna.columns.get_loc('comuna')] = comuna
 
 print('Finish locate conmas')
 
