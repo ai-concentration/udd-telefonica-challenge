@@ -1,0 +1,12 @@
+name: udd-telefonica-reto
+channels:
+  - defaults
+dependencies:
+  - python=3.8
+  - matplotlib
+  - pandas
+  - geopandas
+  - numpy
+  - seaborn
+  - pip:
+    - python-dotenv==0.21.0
