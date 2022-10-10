@@ -1,4 +1,4 @@
-name: udd-telefonica-reto
+name: udd-telefonica-challenge
 channels:
   - defaults
 dependencies:
@@ -8,5 +8,6 @@ dependencies:
   - geopandas
   - numpy
   - seaborn
+  - pip
   - pip:
     - python-dotenv==0.21.0
