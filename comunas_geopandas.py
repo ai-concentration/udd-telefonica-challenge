@@ -2,6 +2,7 @@ import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
 
+print('start to load csv')
 #load tele data
 teledata_location = 'H:\\OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey\\MachineLearning_Extern\\ClassContent\\Reto\\Matrices de Viaje para Santiago Chile\\DataSet\\'
 df = pd.read_csv(teledata_location + '20210101_RM.csv')  
@@ -52,6 +53,22 @@ for count_comuna in range(gdf['NOM_COMUNA'].count()):
             #df_bts_comuna['comuna'][count] = comuna
             df_bts_comuna.iloc[count, df_bts_comuna.columns.get_loc('comuna')] = comuna
 
+#add lat and lon to coord column
+df_bts_comuna['coord'] = list(zip(df_bts_comuna['lat'], df_bts_comuna['lon']))            
+
 print('Finish locate conmas')
 
 df_bts_comuna.to_csv('bts_comuna.csv')
+
+list_coord = df_bts_comuna['coord'].unique().tolist()
+dict_coord_bts = {}
+
+for coord in list_coord:
+    dict_coord_bts[coord] = df_bts_comuna[df_bts_comuna['coord'] == coord]['bts_id'].tolist()
+
+import pickle
+with open("dict_coord_bts.pickle", "wb") as outfile:
+ 	# "wb" argument opens the file in binary mode
+	pickle.dump(dict_coord_bts, outfile)
+
+print('finish dict_coord_bts.pickle')    
