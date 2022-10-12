@@ -46,7 +46,7 @@ How to run comunas.py
 	- Comportamiento sobre el tiempo de las 3 antenas más concurridas
 	- Se revisa que no hayan outliers, checando que no los datos de coordenadas fuera del rango esperado.
 
-# Required directories and files
+# Expected directory tree
 For the programs of the project to run without any issues, the 
 following directory tree must be in place:
 ```
