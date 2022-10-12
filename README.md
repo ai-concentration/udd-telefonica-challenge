@@ -46,6 +46,22 @@ How to run comunas.py
 	- Comportamiento sobre el tiempo de las 3 antenas más concurridas
 	- Se revisa que no hayan outliers, checando que no los datos de coordenadas fuera del rango esperado.
 
+# Required directories and files
+For the programs of the project to run without any issues, the 
+following directory tree must be in place:
+```
+.
+├── json
+│   ├── routes
+│   └── reverse-geocoding-responses
+├── data
+│   ├── data.csv
+│   └── santiago-chile-shape-files
+├── README.md
+├── environment.yml
+└── phones_dataset.names
+```
+
 # Conda setup
 1. Install a distribution of Anaconda or Miniconda
 2. Create conda environment from `environment.yml`:
