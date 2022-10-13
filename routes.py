@@ -26,9 +26,11 @@ for i in dataset.index:
     # Get values by index
     phone_id = dataset["PHONE_ID"][i]
     timestamp = dataset["timestamp"][i]
-    antenna_id = dataset["bts_id"][i]
 
-    phone_id_route[phone_id].append((timestamp, antenna_id))
+    lat = dataset["lat"][i]
+    lon = dataset["lon"][i]
+
+    phone_id_route[phone_id].append((timestamp, lat, lon))
 
 print("Done!")
 
@@ -36,7 +38,7 @@ print("Done!")
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
 
 # Sort mobile connections by timestamp
-print("Sorting mobile connections...")
+print("Sorting mobile connections by timestamp...")
 
 for key in phone_id_route.keys():
     phone_id_route[key].sort(
@@ -49,7 +51,10 @@ for key in phone_id_route.keys():
     
 print("Done!")
 
-# Create directory to store JSON files
+# Store dict in JSON file
+import os
+
+# Create directory to store JSON file
 JSON_DIR = Path("json/routes")
 
 try:
