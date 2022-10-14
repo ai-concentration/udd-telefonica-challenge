@@ -14,7 +14,16 @@ Dentro del folder llamado Reto2 se encuentra:
 - Este folder también contiene algunos archivos auxiliares generado para el manejo de datos
 	
 -----------------------------------------------------------------------------------------------------------------------------------------------------
+## Momento de Retroalimentación: Reto Datos
+https://docs.google.com/document/d/1OKse4OCg9Cg-0ZdUdqQauTMbn7EcfO73dvcSvLNCciY/edit?usp=sharing
+Dentro de la sección de Data preparation se incluye: 
+- Las tecnologías y herramientas usadas para el reto
+- Explicación del modelo de almacenamiento
+- Expliación del proceso de extracción y limpieza de datos
+- Muestra del dataset usado
+- división de datos
 
+----------------------------------------------------------------------------------------------------------------------------------------------------
 ## comunas.py
 
 This python file uses a Google API to get information from the position of the antenna,
