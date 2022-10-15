@@ -1,27 +1,27 @@
 # udd-telefonica-challenge
 -----------------------------------------------------------------------------------------------------------------------------------------------
-## Momento de Retroalimentación: Reto Metodología 
+## Feedback: Reto Metodology 
 https://drive.google.com/drive/folders/1p9R4YdBi9gdW8mukZyk7JRWFNDUAqrAt?usp=sharing
-Dentro del folder llamado Reto2 se encuentra:
+Inside the folder called Reto2 you will find:
 - To do list:
-	- Contiene la lista de las tareas realizadaas y por realizar para el proyecto. Nos da información como la cantidad de horas que tomó hacer la tarea,
-		fecha planeada, fecha en la que se completó, entre otra información útil. Tambien incluye dos graficas(en hojas diferentes) en las que podemos
-		comparar el costo planeado de la actividad contra el costo real en horas (TablaDinámica2) y comparar el avance de poryecto que se tiene planeado
-		contra el avance real hasta el momento(TablaDinámica1)
-- Business Understanding:
-	- Contiene información que resulta relevante dentro del reto,como datos sobre el socio formador, los recursos con los que el equipo cuenta, 
-		software que se estará usando para la solución del reto. 
-- Este folder también contiene algunos archivos auxiliares generado para el manejo de datos
+	- Contains the list of tasks performed and to be performed for the project. It gives us information such as the number of hours it took to do the task,
+	planned date, date completed, among other useful information. It also includes two graphs (on different sheets) in which we can
+	compare the planned cost of the activity against the actual cost in hours (PivotTable2) and compare the progress of the project that is planned
+	against actual progress so far(PivotTable1)
+-Business Understanding:
+	- Contains information that is relevant to the challenge, such as data on the training partner, the resources that the team has,
+	software that will be used to solve the challenge.
+	- This folder also contains some auxiliary files generated for data management
 	
 -----------------------------------------------------------------------------------------------------------------------------------------------------
-## Momento de Retroalimentación: Reto Datos
+## Feedback: Reto Data
 https://docs.google.com/document/d/1OKse4OCg9Cg-0ZdUdqQauTMbn7EcfO73dvcSvLNCciY/edit?usp=sharing
-Dentro de la sección de Data preparation se incluye: 
-- Las tecnologías y herramientas usadas para el reto
-- Explicación del modelo de almacenamiento
-- Expliación del proceso de extracción y limpieza de datos
-- Muestra del dataset usado
-- división de datos
+The Data preparation section includes:
+	- The tools and tecniques
+	- Cleaning data
+	- Scripts configuration
+	- Are we will using split data?
+	- Does the project use Big data?
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ## comunas.py
