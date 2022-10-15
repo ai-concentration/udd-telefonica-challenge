@@ -17,6 +17,7 @@ Inside the folder called Reto2 you will find:
 ## Feedback: Reto Data
 https://docs.google.com/document/d/1OKse4OCg9Cg-0ZdUdqQauTMbn7EcfO73dvcSvLNCciY/edit?usp=sharing
 The Data preparation section includes:
+
 	- The tools and tecniques
 	- Cleaning data
 	- Scripts configuration
