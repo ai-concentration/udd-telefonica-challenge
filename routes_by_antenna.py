@@ -41,7 +41,7 @@ routes_ready = defaultdict(list)
 # )
 
 # Epsilon value to compare floats
-EPSILON = 1e-5
+EPSILON = 1e-3
 
 import numpy as np
 
@@ -99,10 +99,10 @@ for phone_id, route in routes.items():
 
             jump_distance = distance_km(
                 (np.radians(lat_hi), np.radians(lon_hi)),  # Convert to radians
-                (np.radians(lat_nxt), np.radians(lon_nxt)),  # Convert to radians
+                (np.radians(lat_nxt), np.radians(lon_nxt))  # Convert to radians
             )
             # Over 60 to get km/hr instead of km/min
-            jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time / 60
+            jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60
 
             # Update left pointer
             l = i
