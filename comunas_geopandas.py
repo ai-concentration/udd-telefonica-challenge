@@ -1,6 +1,7 @@
 import pandas as pd
 import geopandas as gpd
 from shapely.geometry import Point, Polygon
+from collections import defaultdict
 
 #df: the data frame of the tele data
 #gdf: the geo data frame
@@ -32,7 +33,8 @@ def get_comunas_bts_dict(df, gdf):
     df_bts_comuna = df_bts.copy()
     df_bts_comuna['comuna'] = pd.NA
 
-    count_dup = 0
+    dict_coord_bts = defaultdict(list)
+
     for count_comuna in range(gdf['NOM_COMUNA'].count()):
         comuna = gdf['NOM_COMUNA'][count_comuna]
         for count in range(df_bts_comuna['bts_id'].count()):
@@ -43,25 +45,14 @@ def get_comunas_bts_dict(df, gdf):
             geo = gdf['geometry'][count_comuna]
             if(geo.contains(bts_loc)):
                 #df_bts_comuna['comuna'][count] = comuna
-                if(not pd.isna(df_bts_comuna['comuna'][count])):
-                    count_dup += 1
                 df_bts_comuna.iloc[count, df_bts_comuna.columns.get_loc('comuna')] = comuna
-
-    print('duplicate location count ' + str(count_dup))
+                dict_coord_bts[(lat, lon)].append(df_bts_comuna['bts_id'][count])
 
     #output the comunas csv
     df_bts_comuna.to_csv('bts_comuna.csv')
 
     #add lat and lon to coord column
-    df_bts_comuna['coord'] = list(zip(df_bts_comuna['lat'], df_bts_comuna['lon']))            
-
     print('Finish locate conmas')
-
-    list_coord = df_bts_comuna['coord'].unique().tolist()
-    dict_coord_bts = {}
-
-    for coord in list_coord:
-        dict_coord_bts[coord] = df_bts_comuna[df_bts_comuna['coord'] == coord]['bts_id'].tolist()
 
     import pickle
     with open("dict_coord_bts.pickle", "wb") as outfile:
