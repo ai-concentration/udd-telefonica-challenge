@@ -6,3 +6,4 @@ reverse-geocoding-responses/
 json/
 *.json
 *.csv
+__pycache__/
