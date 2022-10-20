@@ -1,80 +1,121 @@
 import pandas as pd
 import geopandas as gpd
+import os
+import json
 
 from shapely.geometry import Point, Polygon
 from collections import defaultdict
 from pathlib import Path
 
-#df: the data frame of the tele data
-#gdf: the geo data frame
-def get_comunas_bts_dict(df, gdf):
-    #get the list of bts_id and phone_id
-    list_bts_id = df['bts_id'].unique()
-    list_phone_id = df['PHONE_ID'].unique()
 
-    #group the data by bts_id lat and lon
-    df_groupby_bts = df.groupby(['bts_id', 'lat', 'lon']).size().reset_index(name='counts_per_bts')
-    print('finish group data by bts')
+def get_comunas_bts_dict(antenna_df, comunas_geodata):
+    # Define dictionary to store all bts related to an antenna
+    antenna_bts = defaultdict(list)
+    
+    # Create list of comunas to insert later as a column in antenna_df
+    comunas = []
 
-    #create the list of lat and lon for each bts
-    bts_lat_list = []
-    bts_lon_list = []
-    for bts in list_bts_id:
-        lat = df_groupby_bts[df_groupby_bts['bts_id'] == bts]['lat'].values[0]
-        lon = df_groupby_bts[df_groupby_bts['bts_id'] == bts]['lon'].values[0]
-        bts_lat_list.append(lat)
-        bts_lon_list.append(lon)
+    for i in antenna_df.index:
+        # Get lat and lon strings
+        lat = antenna_df["lat"][i]
+        lon = antenna_df["lon"][i]
 
-    print('finish get lat and lon for bts')
+        # Get bts_id by index
+        bts_id = antenna_df["bts_id"][i]
 
-    #create the dataframe for the bts to lat and lon
-    dict_bts = {'bts_id':list_bts_id.tolist(), 'lat':bts_lat_list ,'lon':bts_lon_list}
-    df_bts = pd.DataFrame(dict_bts)
+        # Get antenna id
+        antenna_id = f"{lat},{lon}"
 
-    #check if the location of the bts fall into the specific comunas
-    df_bts_comuna = df_bts.copy()
-    df_bts_comuna['comuna'] = pd.NA
+        # Add bts_id to antenna
+        antenna_bts[antenna_id].append(bts_id)
 
-    dict_coord_bts = defaultdict(list)
+        # Convert lat and lon from strings to floats
+        lat = float(lat)
+        lon = float(lon)
 
-    for count_comuna in range(gdf['NOM_COMUNA'].count()):
-        comuna = gdf['NOM_COMUNA'][count_comuna]
-        for count in range(df_bts_comuna['bts_id'].count()):
-            lon = df_bts_comuna['lon'][count]
-            lat = df_bts_comuna['lat'][count]
+        # Create geopandas Point to determine comuna
+        antenna_loc = Point(lon, lat)
 
-            bts_loc = Point(lon, lat)
-            geo = gdf['geometry'][count_comuna]
-            if(geo.contains(bts_loc)):
-                #df_bts_comuna['comuna'][count] = comuna
-                df_bts_comuna.iloc[count, df_bts_comuna.columns.get_loc('comuna')] = comuna
-                dict_coord_bts[(lat, lon)].append(df_bts_comuna['bts_id'][count])
+        # Get comuna that contains the antenna
+        for comuna, geometry in zip(
+            comunas_geodata["NOM_COMUNA"], comunas_geodata["geometry"]
+        ):
+            # It is guaranteed at least one comuna will match
+            if geometry.contains(antenna_loc):
+                comunas.append(comuna)
+                break
 
-    #output the comunas csv
-    df_bts_comuna.to_csv('bts_comuna.csv')
+    antenna_df["comuna"] = comunas
 
-    #add lat and lon to coord column
-    print('Finish locate conmas')
+    # Create directory to store JSON file
+    JSON_DIR = Path("json")
 
-    import pickle
-    with open("dict_coord_bts.pickle", "wb") as outfile:
-        # "wb" argument opens the file in binary mode
-        pickle.dump(dict_coord_bts, outfile)
+    try:
+        os.mkdir(JSON_DIR)
+    except FileExistsError:
+        print("Directory already exists")
+    except:
+        # Abort program in case other exceptions occur
+        raise Exception("Directory could not be created")
 
-    print('finish dict_coord_bts.pickle')    
+    # Store defaultdict in JSON file
+    print("Storing routes in JSON file...")
+
+    with open(JSON_DIR / "antenna_bts.json", "w") as f:
+        json.dump(antenna_bts, f)
+        
+    print("Done!")
+
+    # Store antenna geolocation dataframe
+    DATA_DIR = Path("data")
+
+    # Check if directory exists
+    try:
+        os.mkdir(JSON_DIR)
+    except FileExistsError:
+        print("Directory already exists")
+    except:
+        # Abort program in case other exceptions occur
+        raise Exception("Directory could not be created")
+
+    antenna_df.to_csv(path_or_buf=DATA_DIR / "antenna_geolocation.csv", index=False)
 
 if __name__ == '__main__':
-    print('start to load csv')
+    # Define dataset column dtypes
+    DATA_DTYPE = {
+        "PHONE_ID": "string",
+        "timestamp": "string",
+        "bts_id": "category",
+        "lat": "string",  # Handling lat as string avoids floating precision errors
+        "lon": "string"  # Handling lon as string avoids floating precision errors
+    }
     
-    #load tele data
+    #load dataset
     DATA_DIR = Path("data")
-    df = pd.read_csv(DATA_DIR / 'data.csv')  
-    print('finish loading tele data')
+    
+    print("Loading dataset..")
+
+    dataset = pd.read_csv(
+        DATA_DIR / 'data.csv',
+        dtype=DATA_DTYPE
+    )  
+    
+    print('Done!')
+
+    # Drop duplicate bts_ids
+    dataset.drop_duplicates(subset=["bts_id"], inplace=True)
+    
+    # Drop phone and timestamp data to work only with antenna data
+    dataset.drop(["PHONE_ID", "timestamp"], axis=1, inplace=True)
 
     #load map data
     MAP_LOC = DATA_DIR / Path("santiago-chile-shape-files")
-    gdf = gpd.read_file(MAP_LOC / "COMUNA_C17.shp")
-    print('finish loading map data')
+    
+    print("Loading shapefile")
+
+    comunas_geodata = gpd.read_file(MAP_LOC / "COMUNA_C17.shp")
+    
+    print('Done!')
 
     #generate comunas and bts dict
-    get_comunas_bts_dict(df, gdf)
+    get_comunas_bts_dict(dataset, comunas_geodata)
