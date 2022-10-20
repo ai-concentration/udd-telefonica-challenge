@@ -11,3 +11,4 @@ dependencies:
   - pip
   - pip:
     - python-dotenv==0.21.0
+    - jupyterlab=3.4.8

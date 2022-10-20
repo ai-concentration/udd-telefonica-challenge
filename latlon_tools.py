@@ -14,7 +14,7 @@ def distance_km(origin, destination):
     @returns
         Distance between origin and destination in km
     """
-    EARTH_RADIUS = 6371
+    EARTH_RADIUS = 6371  # In kilometers
 
     lat = destination[0] - origin[0]
     lon = destination[1] - origin[1]
