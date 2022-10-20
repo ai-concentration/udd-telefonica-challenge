@@ -65,15 +65,15 @@ def get_comunas_bts_dict(df, gdf):
 
 if __name__ == '__main__':
     print('start to load csv')
+    
     #load tele data
-    teledata_location = Path("data")
-    df = pd.read_csv(teledata_location / 'data.csv')  
+    DATA_DIR = Path("data")
+    df = pd.read_csv(DATA_DIR / 'data.csv')  
     print('finish loading tele data')
 
-
     #load map data
-    map_loc = teledata_location / Path("santiago-chile-shape-files")
-    gdf = gpd.read_file(map_loc / "COMUNA_C17.shp")
+    MAP_LOC = DATA_DIR / Path("santiago-chile-shape-files")
+    gdf = gpd.read_file(MAP_LOC / "COMUNA_C17.shp")
     print('finish loading map data')
 
     #generate comunas and bts dict
