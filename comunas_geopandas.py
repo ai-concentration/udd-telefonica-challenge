@@ -1,7 +1,9 @@
 import pandas as pd
 import geopandas as gpd
+
 from shapely.geometry import Point, Polygon
 from collections import defaultdict
+from pathlib import Path
 
 #df: the data frame of the tele data
 #gdf: the geo data frame
@@ -64,14 +66,14 @@ def get_comunas_bts_dict(df, gdf):
 if __name__ == '__main__':
     print('start to load csv')
     #load tele data
-    teledata_location = '~/H/OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey/MachineLearning_Extern/ClassContent/Reto/Matrices de Viaje para Santiago Chile/DataSet/'
-    df = pd.read_csv(teledata_location + '20210101_RM.csv')  
+    teledata_location = Path("data")
+    df = pd.read_csv(teledata_location / 'data.csv')  
     print('finish loading tele data')
 
 
     #load map data
-    map_loc = '~/H/OneDrive - Instituto Tecnologico y de Estudios Superiores de Monterrey/MachineLearning_Extern/ClassContent/Reto/Actividades/R13/'
-    gdf = gpd.read_file(map_loc + "COMUNA_C17.shp")
+    map_loc = teledata_location / Path("santiago-chile-shape-files")
+    gdf = gpd.read_file(map_loc / "COMUNA_C17.shp")
     print('finish loading map data')
 
     #generate comunas and bts dict
