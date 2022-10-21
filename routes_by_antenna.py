@@ -4,15 +4,25 @@ from pathlib import Path
 from latlon_tools import distance_km
 
 # JSON files are stored in json dir
-JSON_DIR = Path("json/routes")
+JSON_DIR = Path("json")
+ROUTES_DIR = JSON_DIR / Path("routes")
 
-# Load JSON file
+# Load JSON files
 routes = None
 
-print("Loading JSON file...")
+print("Loading routes JSON file...")
 
-with open(JSON_DIR / "routes.json", "r") as f:
+with open(ROUTES_DIR / "routes.json", "r") as f:
     routes = json.load(f)
+
+print("Done!")
+
+closest_farthest = None
+
+print("Loading closest and farthest antenna JSON file...")
+
+with open(JSON_DIR / "closest_farthest.json", "r") as f:
+    closest_farthest = json.load(f)
 
 print("Done!")
 
@@ -22,28 +32,11 @@ from datetime import datetime  # To parse timestamp strings
 # Specify time format by which timestamp strings will be parsed
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
 
-# Define dictionary to store routes grouped by antennas
 import pandas as pd
-
-routes_ready = defaultdict(list)
-# routes_ready = pd.DataFrame(
-#     columns=[
-#         "phone id",
-#         "start",
-#         "end",
-#         "lat",
-#         "lon",        
-#         "dwell time",
-#         "jump time",
-#         "jump distance",
-#         "jump velocity"
-#     ]
-# )
-
-# Epsilon value to compare floats
-EPSILON = 1e-3
-
 import numpy as np
+
+# Define dictionary to store routes grouped by antennas
+routes_ready = defaultdict(list)
 
 # Group routes by antenna
 print("Grouping antennas in routes...")
@@ -65,7 +58,7 @@ for phone_id, route in routes.items():
 
         timestamp_nxt, lat_nxt, lon_nxt = route[i]
 
-        jumped = abs(lat_nxt - lat_hi) > EPSILON and abs(lon_nxt - lon_hi) > EPSILON
+        jumped = lat_nxt != lat_hi and lon_nxt != lon_hi
         is_tail = i == route_size - 1
 
         # Make float comparison: If different, then antenna has changed
@@ -98,11 +91,44 @@ for phone_id, route in routes.items():
             jump_time = jump_time.total_seconds() / 60  # Convert to minutes
 
             jump_distance = distance_km(
-                (np.radians(lat_hi), np.radians(lon_hi)),  # Convert to radians
-                (np.radians(lat_nxt), np.radians(lon_nxt))  # Convert to radians
+                # Convert lat and lon strings to floats
+                (np.radians(float(lat_hi)), np.radians(float(lon_hi))),  # Convert to radians
+                (np.radians(float(lat_nxt)), np.radians(float(lon_nxt)))  # Convert to radians
             )
+
+            #          1km
+            # x2 -> [a,b,c,d]
+            #        0.9km
+            #                 y1 20km
+            # x1 -> [a, b, c, d, e]
+
+            # x0 -> y0 (3km)
+
+            # a       b          *x (20km)
+            # *-------* ||
+            #         |
+            #  ------c*-----*d
+            #               |
+            #         ------*e
+
+            # Clustering
+            # Dwell y jump values, contra tiempo
+
             # Compute distance in km/hr instead of km/min
             jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60
+            
+            # Lat and lon hi and lo values are the same, so we can use lat_lo and lon_lo
+            antenna_id = f"{lat_lo},{lon_lo}"
+            closest = closest_farthest[antenna_id][1]  # Index 1 is closest and 0 is farthest
+
+            lat_closest = closest[0]
+            lon_closest = closest[1]
+
+            # Put NaN values to jump distance and velocity if closest antenna coordinates
+            # do not match next antenna coordinates
+            if lat_closest != lat_nxt and lon_closest != lon_nxt:
+                jump_distance = np.nan
+                jump_velocity = np.nan
 
             # Update left pointer
             l = i
