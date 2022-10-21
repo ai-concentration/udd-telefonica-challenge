@@ -23,9 +23,12 @@ key = ""
 closest = ["",""]
 far = ["",""]
 dic = {}
-for i in range(len(dataset['bts_id'])):
+for i in dataset.index:
     distances = []
-    for j in range(len(dataset['bts_id'])):
+    for j in dataset.index:
+        if i == j:  # Continue if same index, otherwise distance and min will be 0!
+            continue
+
         distance = distance_km(
             (np.radians(float(dataset['lat'][i])), np.radians(float(dataset['lon'][i]))),
             (np.radians(float(dataset['lat'][j])), np.radians(float(dataset['lon'][j])))
