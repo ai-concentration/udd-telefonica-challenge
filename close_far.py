@@ -14,7 +14,8 @@ dtype = {
     'lon': 'string',  # Handle as string to avoid floating precision errors
 }
 
-dataset = pd.read_csv(DATA_DIR / 'data.csv', dtype=dtype)
+# Load antenna geolocation dataset due to smaller size
+dataset = pd.read_csv(DATA_DIR / 'antenna_geolocation.csv', dtype=dtype)
 
 max_distance = 0
 min_distance = 10000
@@ -22,10 +23,16 @@ key = ""
 closest = ["",""]
 far = ["",""]
 dic = {}
-for i in range(len(dataset['bts_id'])):
+for i in dataset.index:
     distances = []
-    for j in range(len(dataset['bts_id'])):
-        distance = DistanceKm(dataset['lat'][i],dataset['lon'][i],dataset['lat'][j],dataset['lon'][j])
+    for j in dataset.index:
+        if i == j:  # Continue if same index, otherwise distance and min will be 0!
+            continue
+
+        distance = distance_km(
+            (np.radians(float(dataset['lat'][i])), np.radians(float(dataset['lon'][i]))),
+            (np.radians(float(dataset['lat'][j])), np.radians(float(dataset['lon'][j])))
+        )
         #distances.append(distance)
         if distance > max_distance:
             far = [dataset['lat'][j],dataset['lon'][j]]
