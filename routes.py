@@ -2,12 +2,20 @@ import pandas as pd
 
 from pathlib import Path
 
+DTYPE = {
+    "lat": "string",  # Handling lat as string avoids floating precision errors
+    "lon": "string"  # Handling lon as string avoids floating precision errors
+}
+
 DATA_DIR = Path("data")  # Define directory for datasets
 
 # Loading the dataset
 print("Loading dataset...")
 
-dataset = pd.read_csv(DATA_DIR / "data.csv")
+dataset = pd.read_csv(
+    DATA_DIR / "data.csv",
+    dtype=DTYPE
+)
 
 print("Done!")
 
