@@ -9,9 +9,6 @@ from pathlib import Path
 
 
 def get_comunas_bts_dict(antenna_df, comunas_geodata):
-    # Define dictionary to store all bts related to an antenna
-    antenna_bts = defaultdict(list)
-    
     # Create list of comunas to insert later as a column in antenna_df
     comunas = []
 
@@ -22,16 +19,6 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
 
         # Get bts_id by index
         bts_id = antenna_df["bts_id"][i]
-
-        # Get antenna id
-        antenna_id = f"{lat},{lon}"
-
-        # Add bts_id to antenna
-        antenna_bts[antenna_id].append(bts_id)
-
-        # Convert lat and lon from strings to floats
-        lat = float(lat)
-        lon = float(lon)
 
         # Create geopandas Point to determine comuna
         antenna_loc = Point(lon, lat)
@@ -47,31 +34,15 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
 
     antenna_df["comuna"] = comunas
 
-    # Create directory to store JSON file
-    JSON_DIR = Path("json")
-
-    try:
-        os.mkdir(JSON_DIR)
-    except FileExistsError:
-        print("Directory already exists")
-    except:
-        # Abort program in case other exceptions occur
-        raise Exception("Directory could not be created")
-
-    # Store defaultdict in JSON file
-    print("Storing routes in JSON file...")
-
-    with open(JSON_DIR / "antenna_bts.json", "w") as f:
-        json.dump(antenna_bts, f)
-        
-    print("Done!")
+    # Sort by lat and lon in descending order
+    antenna_df.sort_values(by=["lat", "lon"], inplace=True, ascending=False)
 
     # Store antenna geolocation dataframe
     DATA_DIR = Path("data")
 
     # Check if directory exists
     try:
-        os.mkdir(JSON_DIR)
+        os.mkdir(DATA_DIR)
     except FileExistsError:
         print("Directory already exists")
     except:
@@ -86,8 +57,8 @@ if __name__ == '__main__':
         "PHONE_ID": "string",
         "timestamp": "string",
         "bts_id": "category",
-        "lat": "string",  # Handling lat as string avoids floating precision errors
-        "lon": "string"  # Handling lon as string avoids floating precision errors
+        "lat": "float",  # Handling lat as string avoids floating precision errors
+        "lon": "float"  # Handling lon as string avoids floating precision errors
     }
     
     #load dataset
