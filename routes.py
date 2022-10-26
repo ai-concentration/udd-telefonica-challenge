@@ -2,12 +2,20 @@ import pandas as pd
 
 from pathlib import Path
 
+DTYPE = {
+    "lat": "string",  # Handling lat as string avoids floating precision errors
+    "lon": "string"  # Handling lon as string avoids floating precision errors
+}
+
 DATA_DIR = Path("data")  # Define directory for datasets
 
 # Loading the dataset
 print("Loading dataset...")
 
-dataset = pd.read_csv(DATA_DIR / "data.csv")
+dataset = pd.read_csv(
+    DATA_DIR / "data.csv",
+    dtype=DTYPE
+)
 
 print("Done!")
 
@@ -19,6 +27,9 @@ from datetime import datetime  # So we can deal with timestamps strings
 # Each phone id will have a route (a list), which is composed of mobile connections
 phone_id_route = defaultdict(list)
 
+# Map bts_ids to coordinates
+bts_latlon = {}
+
 # Retrieve info for each mobile connection associated with a phone id
 print("Retrieving mobile connections...")
 
@@ -29,6 +40,15 @@ for i in dataset.index:
 
     lat = dataset["lat"][i]
     lon = dataset["lon"][i]
+
+    bts_id = dataset["bts_id"][i]
+
+    # Only consider the lat and lon of the first bts_id instance
+    if bts_id in bts_latlon:
+        lat = bts_latlon[bts_id][0]
+        lon = bts_latlon[bts_id][1]
+    else:
+        bts_latlon[bts_id] = (lat, lon)
 
     phone_id_route[phone_id].append((timestamp, lat, lon))
 
@@ -65,13 +85,13 @@ except:
     # Abort program in case other exceptions occur
     raise Exception("Directory could not be created")
 
-# Store defaultdict in JSON file
-print("Storing routes in JSON file...")
+# Store routes JSON file
+print("Storing JSON files...")
 
 with open(JSON_DIR / "routes.json", "w") as f:
     json.dump(phone_id_route, f)
-    
+
 print("Done!")
 
 # Print number of phone ids in dataset
-print(len(phone_id_route))
+print("# of phone IDs:", len(phone_id_route))

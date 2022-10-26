@@ -4,15 +4,25 @@ from pathlib import Path
 from latlon_tools import distance_km
 
 # JSON files are stored in json dir
-JSON_DIR = Path("json/routes")
+JSON_DIR = Path("json")
+ROUTES_DIR = JSON_DIR / Path("routes")
 
-# Load JSON file
+# Load JSON files
 routes = None
 
-print("Loading JSON file...")
+print("Loading routes JSON file...")
 
-with open(JSON_DIR / "routes.json", "r") as f:
+with open(ROUTES_DIR / "routes.json", "r") as f:
     routes = json.load(f)
+
+print("Done!")
+
+closest_farthest = None
+
+print("Loading closest and farthest antenna JSON file...")
+
+with open(JSON_DIR / "closest_farthest.json", "r") as f:
+    closest_farthest = json.load(f)
 
 print("Done!")
 
@@ -22,28 +32,11 @@ from datetime import datetime  # To parse timestamp strings
 # Specify time format by which timestamp strings will be parsed
 TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
 
-# Define dictionary to store routes grouped by antennas
 import pandas as pd
-
-routes_ready = defaultdict(list)
-# routes_ready = pd.DataFrame(
-#     columns=[
-#         "phone id",
-#         "start",
-#         "end",
-#         "lat",
-#         "lon",        
-#         "dwell time",
-#         "jump time",
-#         "jump distance",
-#         "jump velocity"
-#     ]
-# )
-
-# Epsilon value to compare floats
-EPSILON = 1e-3
-
 import numpy as np
+
+# Define dictionary to store routes grouped by antennas
+routes_ready = defaultdict(list)
 
 # Group routes by antenna
 print("Grouping antennas in routes...")
@@ -65,7 +58,7 @@ for phone_id, route in routes.items():
 
         timestamp_nxt, lat_nxt, lon_nxt = route[i]
 
-        jumped = abs(lat_nxt - lat_hi) > EPSILON and abs(lon_nxt - lon_hi) > EPSILON
+        jumped = lat_nxt != lat_hi and lon_nxt != lon_hi
         is_tail = i == route_size - 1
 
         # Make float comparison: If different, then antenna has changed
@@ -98,9 +91,11 @@ for phone_id, route in routes.items():
             jump_time = jump_time.total_seconds() / 60  # Convert to minutes
 
             jump_distance = distance_km(
-                (np.radians(lat_hi), np.radians(lon_hi)),  # Convert to radians
-                (np.radians(lat_nxt), np.radians(lon_nxt))  # Convert to radians
+                # Convert lat and lon strings to floats
+                (np.radians(float(lat_hi)), np.radians(float(lon_hi))),  # Convert to radians
+                (np.radians(float(lat_nxt)), np.radians(float(lon_nxt)))  # Convert to radians
             )
+
             # Compute distance in km/hr instead of km/min
             jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60
 

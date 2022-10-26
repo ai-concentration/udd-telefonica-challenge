@@ -9,9 +9,6 @@ from pathlib import Path
 
 
 def get_comunas_bts_dict(antenna_df, comunas_geodata):
-    # Define dictionary to store all bts related to an antenna
-    antenna_bts = defaultdict(list)
-    
     # Create list of comunas to insert later as a column in antenna_df
     comunas = []
 
@@ -23,13 +20,7 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
         # Get bts_id by index
         bts_id = antenna_df["bts_id"][i]
 
-        # Get antenna id
-        antenna_id = f"{lat},{lon}"
-
-        # Add bts_id to antenna
-        antenna_bts[antenna_id].append(bts_id)
-
-        # Convert lat and lon from strings to floats
+        # Convert lat and lon to string to floats
         lat = float(lat)
         lon = float(lon)
 
@@ -47,31 +38,15 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
 
     antenna_df["comuna"] = comunas
 
-    # Create directory to store JSON file
-    JSON_DIR = Path("json")
-
-    try:
-        os.mkdir(JSON_DIR)
-    except FileExistsError:
-        print("Directory already exists")
-    except:
-        # Abort program in case other exceptions occur
-        raise Exception("Directory could not be created")
-
-    # Store defaultdict in JSON file
-    print("Storing routes in JSON file...")
-
-    with open(JSON_DIR / "antenna_bts.json", "w") as f:
-        json.dump(antenna_bts, f)
-        
-    print("Done!")
+    # Sort by bts_id in descending order
+    antenna_df.sort_values(by=["comuna", "bts_id"], inplace=True, ascending=True)
 
     # Store antenna geolocation dataframe
     DATA_DIR = Path("data")
 
     # Check if directory exists
     try:
-        os.mkdir(JSON_DIR)
+        os.mkdir(DATA_DIR)
     except FileExistsError:
         print("Directory already exists")
     except:
@@ -85,7 +60,7 @@ if __name__ == '__main__':
     DATA_DTYPE = {
         "PHONE_ID": "string",
         "timestamp": "string",
-        "bts_id": "category",
+        "bts_id": "string",
         "lat": "string",  # Handling lat as string avoids floating precision errors
         "lon": "string"  # Handling lon as string avoids floating precision errors
     }
@@ -103,7 +78,7 @@ if __name__ == '__main__':
     print('Done!')
 
     # Drop duplicate bts_ids
-    dataset.drop_duplicates(subset=["bts_id"], inplace=True)
+    dataset.drop_duplicates(subset=["bts_id"], inplace=True, keep="first")
     
     # Drop phone and timestamp data to work only with antenna data
     dataset.drop(["PHONE_ID", "timestamp"], axis=1, inplace=True)
