@@ -7,15 +7,20 @@ from pathlib import Path
 
 from latlon_tools import distance_km
 
-DATA_DIR = Path("data")
-
-dtype = {
-    'lat': 'string',  # Handle as string to avoid floating precision errors
-    'lon': 'string',  # Handle as string to avoid floating precision errors
+DTYPE = {
+    "lat": "string",  # Handling lat as string avoids floating precision errors
+    "lon": "string"  # Handling lon as string avoids floating precision errors
 }
 
+DATA_DIR = Path("data")
+
 # Load antenna geolocation dataset due to smaller size
-dataset = pd.read_csv(DATA_DIR / 'antenna_geolocation.csv', dtype=dtype)
+print("Loading dataset...")
+
+# Load dataset
+dataset = pd.read_csv(DATA_DIR / 'antenna_geolocation.csv', dtype=DTYPE)
+
+print("Done!")
 
 max_distance = 0
 min_distance = 10000
@@ -23,6 +28,9 @@ key = ""
 closest = ["",""]
 far = ["",""]
 dic = {}
+
+print("Getting closest and farthest from each antenna...")
+
 for i in dataset.index:
     distances = []
     for j in dataset.index:
@@ -45,6 +53,8 @@ for i in dataset.index:
     key = f"{dataset['lat'][i]},{dataset['lon'][i]}"
     dic[key] = far, closest
 
+print("Done!")
+
 # Create directory to store JSON files
 JSON_DIR = Path("json")
 
@@ -60,6 +70,6 @@ except:
 print("Making JSON file...")
 
 with open(JSON_DIR / "closest_farthest.json", "w") as f:
-    json.dump(dic, f,skipkeys=True)
+    json.dump(dic, f)
     
 print("Done!")
