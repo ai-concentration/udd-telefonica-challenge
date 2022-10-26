@@ -20,7 +20,7 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
         # Get bts_id by index
         bts_id = antenna_df["bts_id"][i]
 
-        # Convert lat and lon to string
+        # Convert lat and lon to string to floats
         lat = float(lat)
         lon = float(lon)
 
