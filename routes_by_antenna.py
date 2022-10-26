@@ -98,19 +98,6 @@ for phone_id, route in routes.items():
 
             # Compute distance in km/hr instead of km/min
             jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60
-            
-            # Lat and lon hi and lo values are the same, so we can use lat_lo and lon_lo
-            antenna_id = f"{lat_lo},{lon_lo}"
-            closest = closest_farthest[antenna_id][1]  # Index 1 is closest and 0 is farthest
-
-            lat_closest = closest[0]
-            lon_closest = closest[1]
-
-            # Put NaN values to jump distance and velocity if closest antenna coordinates
-            # do not match next antenna coordinates
-            if lat_closest != lat_nxt and lon_closest != lon_nxt:
-                jump_distance = np.nan
-                jump_velocity = np.nan
 
             # Update left pointer
             l = i
