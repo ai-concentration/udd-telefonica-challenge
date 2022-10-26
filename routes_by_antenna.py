@@ -96,24 +96,6 @@ for phone_id, route in routes.items():
                 (np.radians(float(lat_nxt)), np.radians(float(lon_nxt)))  # Convert to radians
             )
 
-            #          1km
-            # x2 -> [a,b,c,d]
-            #        0.9km
-            #                 y1 20km
-            # x1 -> [a, b, c, d, e]
-
-            # x0 -> y0 (3km)
-
-            # a       b          *x (20km)
-            # *-------* ||
-            #         |
-            #  ------c*-----*d
-            #               |
-            #         ------*e
-
-            # Clustering
-            # Dwell y jump values, contra tiempo
-
             # Compute distance in km/hr instead of km/min
             jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60
             
