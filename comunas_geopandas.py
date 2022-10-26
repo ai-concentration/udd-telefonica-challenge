@@ -20,6 +20,10 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
         # Get bts_id by index
         bts_id = antenna_df["bts_id"][i]
 
+        # Convert lat and lon to string
+        lat = float(lat)
+        lon = float(lon)
+
         # Create geopandas Point to determine comuna
         antenna_loc = Point(lon, lat)
 
@@ -57,8 +61,8 @@ if __name__ == '__main__':
         "PHONE_ID": "string",
         "timestamp": "string",
         "bts_id": "string",
-        "lat": "float",  # Handling lat as string avoids floating precision errors
-        "lon": "float"  # Handling lon as string avoids floating precision errors
+        "lat": "string",  # Handling lat as string avoids floating precision errors
+        "lon": "string"  # Handling lon as string avoids floating precision errors
     }
     
     #load dataset
@@ -74,7 +78,7 @@ if __name__ == '__main__':
     print('Done!')
 
     # Drop duplicate bts_ids
-    dataset.drop_duplicates(subset=["bts_id"], inplace=True)
+    dataset.drop_duplicates(subset=["bts_id"], inplace=True, keep="first")
     
     # Drop phone and timestamp data to work only with antenna data
     dataset.drop(["PHONE_ID", "timestamp"], axis=1, inplace=True)
