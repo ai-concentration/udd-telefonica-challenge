@@ -34,8 +34,8 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
 
     antenna_df["comuna"] = comunas
 
-    # Sort by lat and lon in descending order
-    antenna_df.sort_values(by=["lat", "lon"], inplace=True, ascending=False)
+    # Sort by bts_id in descending order
+    antenna_df.sort_values(by=["comuna", "bts_id"], inplace=True, ascending=True)
 
     # Store antenna geolocation dataframe
     DATA_DIR = Path("data")
@@ -56,7 +56,7 @@ if __name__ == '__main__':
     DATA_DTYPE = {
         "PHONE_ID": "string",
         "timestamp": "string",
-        "bts_id": "category",
+        "bts_id": "string",
         "lat": "float",  # Handling lat as string avoids floating precision errors
         "lon": "float"  # Handling lon as string avoids floating precision errors
     }
