@@ -9,6 +9,7 @@ dependencies:
   - numpy
   - seaborn
   - pip
+  - scikit-learn
   - pip:
     - python-dotenv==0.21.0
     - jupyterlab==3.4.8
