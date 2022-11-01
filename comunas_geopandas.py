@@ -13,7 +13,7 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
     comunas = []
 
     # Map bts_id to respective comuna
-    bts_comuna_mapping = {}
+    latlon_comuna_mapping = {}
 
     for i in antenna_df.index:
         # Get lat and lon strings
@@ -22,6 +22,9 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
 
         # Get bts_id by index
         bts_id = antenna_df["bts_id"][i]
+
+        # Antenna ID by lat and lon
+        antenna_id = f"{lat},{lon}"
 
         # Convert lat and lon to string to floats
         lat = float(lat)
@@ -36,7 +39,7 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
         ):
             # It is guaranteed at least one comuna will match
             if geometry.contains(antenna_loc):
-                bts_comuna_mapping[bts_id] = comuna  # Assign bts_id to comuna
+                latlon_comuna_mapping[antenna_id] = comuna  # Assign bts_id to comuna
                 comunas.append(comuna)
                 break
 
@@ -64,15 +67,15 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
 
     # Check if directory exists
     try:
-        os.mkdir(DATA_DIR)
+        os.mkdir(JSON_DIR)
     except FileExistsError:
         print("Directory already exists")
     except:
         # Abort program in case other exceptions occur
         raise Exception("Directory could not be created")
 
-    with open(JSON_DIR / "bts_comuna_mapping.json", "w") as f:
-        json.dump(bts_comuna_mapping, f)
+    with open(JSON_DIR / "latlon_comuna_mapping.json", "w") as f:
+        json.dump(latlon_comuna_mapping, f)
 
 
 if __name__ == '__main__':
@@ -88,7 +91,7 @@ if __name__ == '__main__':
     #load dataset
     DATA_DIR = Path("data")
     
-    print("Loading dataset..")
+    print("Loading dataset...")
 
     dataset = pd.read_csv(
         DATA_DIR / 'data.csv',
