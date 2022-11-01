@@ -90,12 +90,6 @@ for phone_id, route in routes.items():
             jump_time = timestamp_nxt - timestamp_hi
             jump_time = jump_time.total_seconds() / 60  # Convert to minutes
 
-            jump_distance = distance_km(
-                # Convert lat and lon strings to floats
-                (np.radians(float(lat_hi)), np.radians(float(lon_hi))),  # Convert to radians
-                (np.radians(float(lat_nxt)), np.radians(float(lon_nxt)))  # Convert to radians
-            )
-
             # Compute distance in km/hr instead of km/min
             jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60
 
