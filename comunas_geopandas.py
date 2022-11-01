@@ -12,6 +12,9 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
     # Create list of comunas to insert later as a column in antenna_df
     comunas = []
 
+    # Map bts_id to respective comuna
+    bts_comuna_mapping = {}
+
     for i in antenna_df.index:
         # Get lat and lon strings
         lat = antenna_df["lat"][i]
@@ -33,6 +36,7 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
         ):
             # It is guaranteed at least one comuna will match
             if geometry.contains(antenna_loc):
+                bts_comuna_mapping[bts_id] = comuna  # Assign bts_id to comuna
                 comunas.append(comuna)
                 break
 
@@ -54,6 +58,22 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
         raise Exception("Directory could not be created")
 
     antenna_df.to_csv(path_or_buf=DATA_DIR / "antenna_geolocation.csv", index=False)
+
+    # Store bts_id/comuna mapping dict to JSON
+    JSON_DIR = Path("json")
+
+    # Check if directory exists
+    try:
+        os.mkdir(DATA_DIR)
+    except FileExistsError:
+        print("Directory already exists")
+    except:
+        # Abort program in case other exceptions occur
+        raise Exception("Directory could not be created")
+
+    with open(JSON_DIR / "bts_comuna_mapping.json", "w") as f:
+        json.dump(bts_comuna_mapping, f)
+
 
 if __name__ == '__main__':
     # Define dataset column dtypes
