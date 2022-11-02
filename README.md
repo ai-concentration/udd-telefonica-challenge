@@ -50,11 +50,18 @@ How to run comunas.py
 ## Functions_and_visualization.ipynb
 
 - Contiene 2 funciones que esperamos resulten útiles para generar la matriz origen destino
-	- Función que ayuda a conocer la distancia en Kilometros entre 2 puntos dados en coordenadas. 
+	- Función que ayuda a conocer la distancia en Kilometros entre 2 puntos dados en coordenadas, esta función se llama "distance_km". 
 	- Función que recibe una coordenada "coor" y una distancia "d" y devuelve 3 puntos que se encuentran a "d" kilometros del punto "coor"
 - Contiene alguna visualizaciones básicas para poder comenzar a comprender los datos
 	- Comportamiento sobre el tiempo de las 3 antenas más concurridas
 	- Se revisa que no hayan outliers, checando que no los datos de coordenadas fuera del rango esperado.
+---------------------------------------------------------------------------------------------------------------------------------------------------------
+## Close_far.py
+- This script was used to know the closest and the farthest antena from each antena, we used this information to know if the change between two antenna 
+was to one that was close enough to be considered as a real "trace" or if it was just a misconnection of the antenna. In other words, we want to
+discard the trips wich speed does not make sense.
+- We used the function "distance_km" described above
+- Used a dataset with the antenna labeled with the name of the comuna where each antena is
 
 # Expected directory tree
 For the programs of the project to run without any issues, the 
