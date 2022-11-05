@@ -1,4 +1,35 @@
 # udd-telefonica-challenge
+
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+## Feedback: Reto Documentation
+https://drive.google.com/drive/folders/1p9R4YdBi9gdW8mukZyk7JRWFNDUAqrAt?usp=share_link
+Inside the folder called Reto2 you will find new folders:
+- Data Understanding:
+	- Contains all the details of the data used to make new information or inferences of the study cases.
+	- This folder just contains the document with the sections of data understanding and the adjusts with CRISP-DM.
+- Data preparation:
+	- Contains all the process that the team do to get the matrix of origin destiny for count the tracks of the phone_id.
+	- This folder just contains the document with the sections of data preparation and the adjusts with CRISP-DM.
+-Modeling:
+	- Contains information that is relevant for choosing a model to get the objetives of data mining.
+	- This folder just contains the document with the sections of data modeling and the adjusts with CRISP-DM.
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+## Feedback: Reto Security
+Inside the folder called Security and Privacity in this repository, you will find:
+-Privacity and Security of data:
+	- Contains information that is relevant the process of security that the team and the socio formador do in terms of propposal to the Reto.
+	- This folder only contains a document with all the points to answer.
+-----------------------------------------------------------------------------------------------------------------------------------------------------
+## Feedback: Reto Data
+https://docs.google.com/document/d/1OKse4OCg9Cg-0ZdUdqQauTMbn7EcfO73dvcSvLNCciY/edit?usp=sharing
+The Data preparation section includes:
+
+	- The tools and tecniques
+	- Cleaning data
+	- Scripts configuration
+	- Are we will using split data?
+	- Does the project use Big data?
+	
 -----------------------------------------------------------------------------------------------------------------------------------------------
 ## Feedback: Reto Metodology 
 https://drive.google.com/drive/folders/1p9R4YdBi9gdW8mukZyk7JRWFNDUAqrAt?usp=sharing
@@ -12,18 +43,6 @@ Inside the folder called Reto2 you will find:
 	- Contains information that is relevant to the challenge, such as data on the training partner, the resources that the team has,
 	software that will be used to solve the challenge.
 	- This folder also contains some auxiliary files generated for data management
-	
------------------------------------------------------------------------------------------------------------------------------------------------------
-## Feedback: Reto Data
-https://docs.google.com/document/d/1OKse4OCg9Cg-0ZdUdqQauTMbn7EcfO73dvcSvLNCciY/edit?usp=sharing
-The Data preparation section includes:
-
-	- The tools and tecniques
-	- Cleaning data
-	- Scripts configuration
-	- Are we will using split data?
-	- Does the project use Big data?
-
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ## comunas.py
 
