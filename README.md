@@ -10,7 +10,7 @@ Inside the folder called CRISP-DM in Reto2 you will find new folders:
 - Data preparation:
 	- Contains all the process that the team do to get the matrix of origin destiny for count the tracks of the phone_id.
 	- This folder just contains the document with the sections of data preparation and the adjusts with CRISP-DM.
--Modeling:
+- Modeling:
 	- Contains information that is relevant for choosing a model to get the objetives of data mining.
 	- This folder just contains the document with the sections of data modeling and the adjusts with CRISP-DM.
 -----------------------------------------------------------------------------------------------------------------------------------------------------
