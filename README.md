@@ -16,7 +16,8 @@ Inside the folder called Reto2 you will find new folders:
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 ## Feedback: Reto Security
 Inside the folder called Security and Privacity in this repository, you will find:
--Privacity and Security of data:
+
+- Privacity and Security of data:
 	- Contains information that is relevant the process of security that the team and the socio formador do in terms of propposal to the Reto.
 	- This folder only contains a document with all the points to answer.
 -----------------------------------------------------------------------------------------------------------------------------------------------------
