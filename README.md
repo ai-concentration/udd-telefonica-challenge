@@ -24,7 +24,8 @@ Inside the folder called CRISP-DM in Reto2 you will find new folders:
 	- This folder just contains the document with the sections of data modeling and the adjusts with CRISP-DM.
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 ## Feedback: Reto Security
-Inside the folder called Security and Privacity in this repository, you will find:
+https://docs.google.com/document/d/19bzXYv0qmKwh5fwQ419PEu9nYqN7SvClEHKyyjYAtAc/edit?usp=sharing
+Inside the Data preparation in Google drive, you will find:
 
 - Privacity and Security of data:
 	- Contains information that is relevant the process of security that the team and the socio formador do in terms of propposal to the Reto.
