@@ -13,6 +13,7 @@
 ## Feedback: Reto Documentation
 https://drive.google.com/drive/folders/1p9R4YdBi9gdW8mukZyk7JRWFNDUAqrAt?usp=share_link
 Inside the folder called CRISP-DM in Reto2 you will find new folders:
+
 - Data Understanding:
 	- Contains all the details of the data used to make new information or inferences of the study cases.
 	- This folder just contains the document with the sections of data understanding and the adjusts with CRISP-DM.
@@ -45,6 +46,7 @@ The Data preparation section includes:
 ## Feedback: Reto Metodology 
 https://drive.google.com/drive/folders/1p9R4YdBi9gdW8mukZyk7JRWFNDUAqrAt?usp=sharing
 Inside the folder called CRISP-DM in Reto2 you will find:
+
 - To do list:
 	- Contains the list of tasks performed and to be performed for the project. It gives us information such as the number of hours it took to do the task,
 	planned date, date completed, among other useful information. It also includes two graphs (on different sheets) in which we can
@@ -87,6 +89,7 @@ How to run comunas.py
 	- Se revisa que no hayan outliers, checando que no los datos de coordenadas fuera del rango esperado.
 ---------------------------------------------------------------------------------------------------------------------------------------------------------
 ## Close_far.py
+
 - This script was used to know the closest and the farthest antena from each antena, we used this information to know if the change between two antenna 
 was to one that was close enough to be considered as a real "trace" or if it was just a misconnection of the antenna. In other words, we want to
 discard the trips wich speed does not make sense.
