@@ -1,11 +1,13 @@
-# udd-telefonica-challenge
+# RETO: TELEFONICA CHALLENGUE
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## Team members
 
-	- Gerardo Peña Pérez
-	- Carlos Alberto Hurtado Sanchez
+	- Gerardo Peña Pérez A01701474
+	- Carlos Alberto Hurtado Sanchez A01700885
 	- Kevin Joan Delgado Pérez A01706328
-	- Wenguang hu
+	- Wenguang hu A01706648
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 ## Feedback: Reto Documentation
