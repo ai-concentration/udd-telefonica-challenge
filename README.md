@@ -62,6 +62,7 @@ Inside the folder called CRISP-DM in Reto2 you will find:
 This python file takes the dataset 'routes_ready.csv' and adds the name of the comuna where each connection took place.
 Generates a dataset with origin, destination and categorical variable for the dwell time and the speed.
 Then we use that dataset to generate the matrix with the number of the trips between comunas. Then we display a heatmap for a better visualization 
+
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
 ## comunas.py
