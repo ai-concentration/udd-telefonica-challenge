@@ -1,36 +1,29 @@
 import json
+import pandas as pd
 
 from pathlib import Path
 from latlon_tools import distance_km
 
-# JSON files are stored in json dir
-JSON_DIR = Path("json")
-ROUTES_DIR = JSON_DIR / Path("routes")
+# Define directory containing the data
+DATA_DIR = Path("data")
 
-# Load JSON files
-routes = None
+# Specify types of columns
+DTYPE = {
+    "lat": "string",  # Handling lat as string avoids floating precision errors
+    "lon": "string"  # Handling lon as string avoids floating precision errors
+}
 
-print("Loading routes JSON file...")
+# Load updated data
+print("Loading updated dataset...")
 
-with open(ROUTES_DIR / "routes.json", "r") as f:
-    routes = json.load(f)
-
-print("Done!")
-
-closest_farthest = None
-
-print("Loading closest and farthest antenna JSON file...")
-
-with open(JSON_DIR / "closest_farthest.json", "r") as f:
-    closest_farthest = json.load(f)
+updated_dataset = pd.read_csv(
+    DATA_DIR / "updated_data.csv",
+    dtype=DTYPE
+)
 
 print("Done!")
 
 from collections import defaultdict
-from datetime import datetime  # To parse timestamp strings
-
-# Specify time format by which timestamp strings will be parsed
-TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
 
 import pandas as pd
 import numpy as np
@@ -38,66 +31,106 @@ import numpy as np
 # Define dictionary to store routes grouped by antennas
 routes_ready = defaultdict(list)
 
+# Keep track of current index
+idx = 0
+
+# Setup two pointers
+l = 0
+r = 0
+
+# Setup jump values to NaN
+jump_time = np.nan
+jump_distance = np.nan
+jump_velocity = np.nan
+
+# Get dataset entries
+ENTRIES = len(updated_dataset.index)
+
+# Keep track of phone ID changes with flag
+phone_id_tail = False
+
 # Group routes by antenna
 print("Grouping antennas in routes...")
 
-for phone_id, route in routes.items():
-    route_size = len(route)
-
-    l = 0  # Left pointer
-    r = 0  # Right pointer
-
-    # Set jump values to NaN
-    jump_time = np.nan
-    jump_distance = np.nan
-    jump_velocity = np.nan
-    
-    for i in range(0, route_size):
-        timestamp_lo, lat_lo, lon_lo = route[l]
-        timestamp_hi, lat_hi, lon_hi = route[r]
-
-        timestamp_nxt, lat_nxt, lon_nxt = route[i]
-
-        jumped = lat_nxt != lat_hi and lon_nxt != lon_hi
-        is_tail = i == route_size - 1
-
-        # Make float comparison: If different, then antenna has changed
-        if jumped or is_tail:
-            timestamp_lo = datetime.strptime(timestamp_lo, TIME_FORMAT)
-            timestamp_hi = datetime.strptime(timestamp_hi, TIME_FORMAT)
-
-            timestamp_nxt = datetime.strptime(timestamp_nxt, TIME_FORMAT)
-
-            dwell_time = timestamp_hi - timestamp_lo
-            dwell_time = dwell_time.total_seconds() / 60  # Convert to minutes
-
-            # Append values to dictionary
-            routes_ready["phone id"].append(phone_id)
-            
-            routes_ready["start"].append(datetime.strftime(timestamp_lo, TIME_FORMAT))  # start
-            routes_ready["end"].append(datetime.strftime(timestamp_hi, TIME_FORMAT))  # end
-            
-            routes_ready["lat"].append(lat_hi)
-            routes_ready["lon"].append(lon_hi)
-            
-            routes_ready["dwell time"].append(dwell_time)
-
-            routes_ready["jump time"].append(jump_time)
-            routes_ready["jump distance"].append(jump_distance)
-            routes_ready["jump velocity"].append(jump_velocity)
-            
-            # Update jump values
-            jump_time = timestamp_nxt - timestamp_hi
-            jump_time = jump_time.total_seconds() / 60  # Convert to minutes
-
-            # Compute distance in km/hr instead of km/min
-            jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60
-
-            # Update left pointer
-            l = i
-
-        # Update right pointer
+for i in updated_dataset.index:
+    # Update pointer and jump values when phone ID changes
+    if phone_id_tail:
+        # Update pointers
+        l = i
         r = i
+
+        # Update jump values
+        jump_time = np.nan
+        jump_distance = np.nan
+        jump_velocity = np.nan
+
+    # Get current phone ID
+    phone_id = updated_dataset["PHONE_ID"][i]    
+
+    # Get next index
+    j = min(i+1, ENTRIES-1)
+
+    # Get next phone ID
+    phone_id_nxt = updated_dataset["PHONE_ID"][j]
+
+    # Get current timestamp and lat/lon values
+    timestamp_now = updated_dataset["timestamp"][i]
+
+    lat_now = updated_dataset["lat"][i]
+    lon_now = updated_dataset["lon"][i]
+
+    # Get left and right pointer timestamps and lat/lon values
+    timestamp_l = updated_dataset["timestamp"][l]
+    timestamp_r = updated_dataset["timestamp"][r]
+
+    lat_l = updated_dataset["lat"][l]
+    lat_r = updated_dataset["lat"][r]
+
+    lon_l = updated_dataset["lon"][l]
+    lon_r = updated_dataset["lon"][r]
+
+    # Determine if antennas from left pointer to right pointer should be grouped
+    jumped = lat_now != lat_r and lon_now != lon_r
+    phone_id_tail = phone_id != phone_id_nxt or j == ENTRIES - 1
+
+    # Group entires with same antena
+    if jumped or phone_id_tail:
+        dwell_time = (timestamp_r - timestamp_l) / 60  # Get dwell time in minutes
+
+        # Append values to dictionary
+        routes_ready["phone id"].append(phone_id)
+
+        routes_ready["start"].append(timestamp_l)
+        routes_ready["stop"].append(timestamp_r)
+
+        routes_ready["lat"].append(lat_r)
+        routes_ready["lon"].append(lon_r)
+
+        routes_ready["dwell time"].append(dwell_time)
+
+        routes_ready["jump time"].append(jump_time)
+        routes_ready["jump distance"].append(jump_distance)
+        routes_ready["jump velocity"].append(jump_velocity)
+
+        # Update jump time
+        jump_time = (timestamp_now - timestamp_r) / 60  # Get jump time in minutes
+
+        # Update jump distance
+        jump_distance = distance_km(
+            # Lat and lon values pass form strings to float
+            (np.radians(float(lat_r)), np.radians(float(lon_r))),  # Convert to radians
+            (np.radians(float(lat_now)), np.radians(float(lon_now)))  # Convert to radians
+        )
+
+        # Update jump velocity
+        jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60  # To km/hr
+
+        # Update left pointer
+        l = i
+
+    idx += 1
+
+    r = i  # Update right pointer
             
 print("Done!")
 
@@ -106,8 +139,6 @@ routes_ready = pd.DataFrame(data=routes_ready)
 
 # Create dir to store dataframe's CSV
 import os
-
-DATA_DIR = Path("data")
 
 try:
     os.mkdir(DATA_DIR)
