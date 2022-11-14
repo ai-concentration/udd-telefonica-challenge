@@ -7,6 +7,8 @@ from shapely.geometry import Point, Polygon
 from collections import defaultdict
 from pathlib import Path
 
+from utils.storers import JSONStorer, CSVStorer
+
 
 def get_comunas_bts_dict(antenna_df, comunas_geodata):
     # Create list of comunas to insert later as a column in antenna_df
@@ -47,33 +49,11 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
     antenna_df.sort_values(by=["comuna", "bts_id"], inplace=True, ascending=True)
 
     # Store antenna geolocation dataframe
-    DATA_DIR = Path("data")
-
-    # Check if directory exists
-    try:
-        os.mkdir(DATA_DIR)
-    except FileExistsError:
-        print("Directory already exists")
-    except:
-        # Abort program in case other exceptions occur
-        raise Exception("Directory could not be created")
-
-    antenna_df.to_csv(path_or_buf=DATA_DIR / "antenna_geolocation.csv", index=False)
+    CSVStorer("antenna_geolocation", antenna_df).store()
 
     # Store antenna geolocation dataframe
-    JSON_DIR = Path("json")
+    JSONStorer("bts_latlon_mapping", bts_latlon_mapping).store()
 
-    # Check if directory exists
-    try:
-        os.mkdir(JSON_DIR)
-    except FileExistsError:
-        print("Directory already exists")
-    except:
-        # Abort program in case other exceptions occur
-        raise Exception("Directory could not be created")
-
-    with open(JSON_DIR / "bts_latlon_mapping.json", "w") as f:
-        json.dump(bts_latlon_mapping, f)
 
 if __name__ == '__main__':
     # Define dataset column dtypes
