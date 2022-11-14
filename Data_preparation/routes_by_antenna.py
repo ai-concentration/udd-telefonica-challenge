@@ -137,20 +137,11 @@ print("Done!")
 # Convert dict to dataframe
 routes_ready = pd.DataFrame(data=routes_ready)
 
-# Create dir to store dataframe's CSV
-import os
-
-try:
-    os.mkdir(DATA_DIR)
-except FileExistsError:
-    print("Directory already exists")
-except:
-    # Abort program in case other exceptions occur
-    raise Exception("Directory could not be created")
-
 # Save dataframe to CSV
 print("Storing dataframe in CSV file...")
 
-routes_ready.to_csv(path_or_buf=DATA_DIR / "routes_ready.csv", index=False)
+from utils.storers import CSVStorer
+
+CSVStorer("routes_ready", routes_ready).store()
     
 print("Done!")
