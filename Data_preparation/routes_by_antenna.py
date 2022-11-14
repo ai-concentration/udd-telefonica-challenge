@@ -1,16 +1,20 @@
 import json
 import pandas as pd
+import numpy as np
 
 from pathlib import Path
 from latlon_tools import distance_km
 
-# Define directory containing the data
-DATA_DIR = Path("data")
+from utils.constants import DATA_DIR
 
 # Specify types of columns
 DTYPE = {
-    "lat": "string",  # Handling lat as string avoids floating precision errors
-    "lon": "string"  # Handling lon as string avoids floating precision errors
+    "PHONE_ID": "string",
+    "bts_id": "string",
+    "antenna id": np.int64,
+    "timestamp": np.int64,
+    "lat": np.int64,
+    "lon": np.int64
 }
 
 # Load updated data
@@ -24,9 +28,6 @@ updated_dataset = pd.read_csv(
 print("Done!")
 
 from collections import defaultdict
-
-import pandas as pd
-import numpy as np
 
 # Define dictionary to store routes grouped by antennas
 routes_ready = defaultdict(list)
