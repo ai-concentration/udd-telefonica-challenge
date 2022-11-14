@@ -1,78 +1,33 @@
+import os
 import pandas as pd
+import numpy as np
 
 from pathlib import Path
 
-DTYPE = {
-    "lat": "string",  # Handling lat as string avoids floating precision errors
-    "lon": "string"  # Handling lon as string avoids floating precision errors
-}
-
-DATA_DIR = Path("data")  # Define directory for datasets
-JSON_DIR = Path("json")  # Define directory for JSONs
+from utils.constants import DECIMALS, DATA_DTYPE, JSON_DIR, DATA_DIR, KM_TO_M
 
 # Loading the dataset
 print("Loading dataset...")
 
-dataset = pd.read_csv(
-    DATA_DIR / "data.csv",
-    dtype=DTYPE
-)
+dataset = pd.read_csv(DATA_DIR / "data.csv")
 
 print("Done!")
 
 import json
 
-from collections import defaultdict
-from datetime import datetime  # So we can deal with timestamps strings
+from collections import defaultdict  # apply method performs in parallel
 
-# Specify time format by which timestamp strings will be parsed
-TIME_FORMAT = "%Y-%m-%dT%H:%M:%S.%f%z"
+# Convert timestamp datetimes total seconds
+print("Updating timestamp column...")
 
-# Get first timestamp in dataset and convert it to datetime object
-FIRST_TIMESTAMP = datetime.strptime(dataset["timestamp"][0], TIME_FORMAT)
+dataset["timestamp"] = pd.to_datetime(
+    dataset["timestamp"],
+    utc=True,
+    infer_datetime_format=True
+)
 
-
-def get_time_dummy(timestamp):
-    """
-    Convert each timestamp from dataset to time dummy
-    """
-    timestamp = datetime.strptime(timestamp, TIME_FORMAT)
-
-    seconds_delta = timestamp - FIRST_TIMESTAMP
-
-    return int(seconds_delta.total_seconds())  # Time dummies are computed per second
-
-
-# Update timestamp column with time dummy values
-print("Converting timestamp values to time dummies...")
-
-dataset["timestamp"] = dataset["timestamp"].apply(get_time_dummy)  # apply method performs in parallel
-
-print("Done!")
-
-bts_latlon_mapping = None
-
-print("Loading bts/lat lon mapping...")
-
-with open(JSON_DIR / "bts_latlon_mapping.json", "r") as f:
-    bts_latlon_mapping = json.load(f)
-
-print("Done!")
-
-
-def clean_lat_lon(bts_id):
-    lat = bts_latlon_mapping[bts_id].split(",")[0]
-    lon = bts_latlon_mapping[bts_id].split(",")[1]
-
-    return lat, lon
-
-
-# Update lat and lon columns
-print("Updating lat and lon columns...")
-
-dataset["lat"], dataset["lon"] = zip(*dataset["bts_id"].apply(clean_lat_lon))
-
-print("Done!")
+dataset["timestamp"] = dataset["timestamp"] - dataset["timestamp"][0]
+dataset["timestamp"] = dataset["timestamp"].dt.total_seconds().astype(int)
 
 # Get min value from timestamp time dummies
 MIN_TIME_DUMMY = dataset["timestamp"].min()
@@ -80,10 +35,48 @@ MIN_TIME_DUMMY = dataset["timestamp"].min()
 # Update time dummies to go from 0 to max + min instead of from min to max
 dataset["timestamp"] -= MIN_TIME_DUMMY
 
+print("Done!")
+
+# Add ID per antena based on distance between lat and lon random pair
+print("Computing ID for every antena...")
+
+LAT_LON_ORIGIN = (dataset["lat"][0], dataset["lon"][0])
+EARTH_RADIUS = 6371  # In kilometers
+
+lat_rad = np.radians(dataset["lat"])
+lon_rad = np.radians(dataset["lon"])
+
+lat_delta = lat_rad - LAT_LON_ORIGIN[0]
+lon_delta = lon_rad - LAT_LON_ORIGIN[1]
+
+arc = np.sin(lat_delta / 2) ** 2 + np.cos(LAT_LON_ORIGIN[0]) \
+    * np.sin(lon_delta / 2) ** 2 * np.cos(lat_rad)
+
+dataset["antenna id"] = 2 * EARTH_RADIUS * np.arctan2(np.sqrt(arc), np.sqrt(1 - arc))
+dataset["antenna id"] *= KM_TO_M
+dataset["antenna id"] = dataset["antenna id"].astype(np.int64)
+
+MIN_ANTENNA_ID = dataset["antenna id"].min()
+
+dataset["antenna id"] -= MIN_ANTENNA_ID
+
+print("Done!")
+
+# Update lat and lon columns to be integers
+print("Converting float columns to integer columns...")
+
+dataset["lat"] *= 10 ** DECIMALS
+dataset["lon"] *= 10 ** DECIMALS
+
+dataset["lat"] = dataset["lat"].astype(np.int64)
+dataset["lon"] = dataset["lon"].astype(np.int64)
+
+print("Done!")
+
 # Sort by timestamp and by phone ID
 print("Sorting dataset...")
 
-dataset.sort_values(
+dataset.sort_values( 
     by=["PHONE_ID", "timestamp"],
     inplace=True,
     ascending=True
@@ -91,13 +84,11 @@ dataset.sort_values(
 
 print("Done!")
 
+from utils.storers import CSVStorer
 
 # Store updated dataset
 print("Saving updated dataset...")
 
-dataset.to_csv(
-    path_or_buf=DATA_DIR / "updated_data.csv",
-    index=False
-)
+CSVStorer("updated_data", dataset).store()
 
 print("Done!")
