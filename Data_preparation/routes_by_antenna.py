@@ -1,11 +1,14 @@
 import json
 import pandas as pd
 import numpy as np
+import multiprocessing as mp
 
 from pathlib import Path
-from latlon_tools import distance_km
+from collections import defaultdict
 
-from utils.constants import DATA_DIR
+from latlon_tools import distance_km
+from utils.constants import DATA_DIR, DECIMALS
+from utils.storers import CSVStorer
 
 # Specify types of columns
 DTYPE = {
@@ -17,132 +20,132 @@ DTYPE = {
     "lon": np.int64
 }
 
-# Load updated data
-print("Loading updated dataset...")
 
-updated_dataset = pd.read_csv(
-    DATA_DIR / "updated_data.csv",
-    dtype=DTYPE
-)
+def groupby_antenna_id(phone_id_group):
+    updated_dataset, phone_id, idx_range = phone_id_group
 
-print("Done!")
+    values = []
+    columns = [
+        "phone id", "antenna id",
+        "start", "stop",
+        "lat", "lon",
+        "dweel time", "jump time",
+        "jump distance", "jump velocity"
+    ]
 
-from collections import defaultdict
+    # Setup left pointer
+    l = idx_range[0]
 
-# Define dictionary to store routes grouped by antennas
-routes_ready = defaultdict(list)
+    # Setup initial jump values
+    jump_time = np.nan
+    jump_distance = np.nan
+    jump_velocity = np.nan
 
-# Keep track of current index
-idx = 0
+    # Get max index
+    MAX_IDX = idx_range[-1]
 
-# Setup two pointers
-l = 0
-r = 0
+    for r in idx_range:
+        i = min(r+1, MAX_IDX)
 
-# Setup jump values to NaN
-jump_time = np.nan
-jump_distance = np.nan
-jump_velocity = np.nan
+        # Get antenna ID values
+        antenna_id_nxt = updated_dataset["antenna id"][i]
+        antenna_id_r = updated_dataset["antenna id"][r]
 
-# Get dataset entries
-ENTRIES = len(updated_dataset.index)
+        # Get timestamp values
+        timestamp_l = updated_dataset["timestamp"][l]
+        timestamp_r = updated_dataset["timestamp"][r]
+        timestamp_nxt = updated_dataset["timestamp"][i]
 
-# Keep track of phone ID changes with flag
-phone_id_tail = False
+        # Get lat and lon values
+        lat_r = updated_dataset["lat"][r] / 10 ** DECIMALS
+        lat_nxt = updated_dataset["lat"][i] / 10 ** DECIMALS
 
-# Group routes by antenna
-print("Grouping antennas in routes...")
+        lon_r = updated_dataset["lon"][r] / 10 ** DECIMALS
+        lon_nxt = updated_dataset["lon"][i] / 10 ** DECIMALS
 
-for i in updated_dataset.index:
-    # Update pointer and jump values when phone ID changes
-    if phone_id_tail:
-        # Update pointers
-        l = i
-        r = i
+        # Determine if a next antenna ID is different from current
+        jumped = antenna_id_nxt != antenna_id_r
 
-        # Update jump values
-        jump_time = np.nan
-        jump_distance = np.nan
-        jump_velocity = np.nan
+        # Determine if the end of the array's been reached
+        is_end = r == i
 
-    # Get current phone ID
-    phone_id = updated_dataset["PHONE_ID"][i]    
+        if jumped or is_end:
+            dwell_time = (timestamp_r - timestamp_l) / 60  # Get dwell time in minutes
 
-    # Get next index
-    j = min(i+1, ENTRIES-1)
+            values.append([
+                phone_id,
+                antenna_id_r,
+                timestamp_l,
+                timestamp_r,
+                lat_r,
+                lon_r,
+                dwell_time,                
+                jump_time,
+                jump_distance,
+                jump_velocity
+            ])
 
-    # Get next phone ID
-    phone_id_nxt = updated_dataset["PHONE_ID"][j]
+            # Update jump time
+            jump_time = (timestamp_nxt - timestamp_r) / 60  # Get jump time in minutes
 
-    # Get current timestamp and lat/lon values
-    timestamp_now = updated_dataset["timestamp"][i]
+            # Update jump distance
+            jump_distance = distance_km(
+                (np.radians(lat_r), np.radians(lon_r)),
+                (np.radians(lat_nxt), np.radians(lon_nxt))
+            )
 
-    lat_now = updated_dataset["lat"][i]
-    lon_now = updated_dataset["lon"][i]
+            # Update jump velocity
+            jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60  # km/hr
 
-    # Get left and right pointer timestamps and lat/lon values
-    timestamp_l = updated_dataset["timestamp"][l]
-    timestamp_r = updated_dataset["timestamp"][r]
+            # Update left pointer
+            l = i
 
-    lat_l = updated_dataset["lat"][l]
-    lat_r = updated_dataset["lat"][r]
+    return pd.DataFrame(values, columns=columns)
 
-    lon_l = updated_dataset["lon"][l]
-    lon_r = updated_dataset["lon"][r]
 
-    # Determine if antennas from left pointer to right pointer should be grouped
-    jumped = lat_now != lat_r and lon_now != lon_r
-    phone_id_tail = phone_id != phone_id_nxt or j == ENTRIES - 1
+if __name__ == "__main__":
+    # Load updated data
+    print("Loading updated dataset...")
 
-    # Group entires with same antena
-    if jumped or phone_id_tail:
-        dwell_time = (timestamp_r - timestamp_l) / 60  # Get dwell time in minutes
+    updated_dataset = pd.read_csv(
+        DATA_DIR / "updated_data.csv",
+        dtype=DTYPE
+    )
 
-        # Append values to dictionary
-        routes_ready["phone id"].append(phone_id)
+    print("Done!")
 
-        routes_ready["start"].append(timestamp_l)
-        routes_ready["stop"].append(timestamp_r)
+    # Retrieving phone ID groups
+    print("Retrieving phone ID groups...")
 
-        routes_ready["lat"].append(lat_r)
-        routes_ready["lon"].append(lon_r)
+    phone_id_groups = [
+        (updated_dataset, phone_id, idx_range)
+        for phone_id, idx_range in updated_dataset.groupby(
+            ["PHONE_ID"], sort=False
+        ).groups.items()
+    ]
 
-        routes_ready["dwell time"].append(dwell_time)
+    print("Done!")
 
-        routes_ready["jump time"].append(jump_time)
-        routes_ready["jump distance"].append(jump_distance)
-        routes_ready["jump velocity"].append(jump_velocity)
+    # Perform multiprocessing
+    print("Performing multiprocessing...")
 
-        # Update jump time
-        jump_time = (timestamp_now - timestamp_r) / 60  # Get jump time in minutes
+    results = []
 
-        # Update jump distance
-        jump_distance = distance_km(
-            # Lat and lon values pass form strings to float
-            (np.radians(float(lat_r)), np.radians(float(lon_r))),  # Convert to radians
-            (np.radians(float(lat_now)), np.radians(float(lon_now)))  # Convert to radians
-        )
+    with mp.Pool(processes=int(mp.cpu_count() * 3 / 4)) as pool:
+        results = pool.map(groupby_antenna_id, phone_id_groups)
 
-        # Update jump velocity
-        jump_velocity = np.nan if jump_time == 0 else jump_distance / jump_time * 60  # To km/hr
+    print("Done!")
 
-        # Update left pointer
-        l = i
+    # Concat results from multiprocessing
+    print("Concatenating multiprocessing results...")
 
-    idx += 1
+    routes_ready = pd.concat(results)
 
-    r = i  # Update right pointer
-            
-print("Done!")
+    print("Done!")
 
-# Convert dict to dataframe
-routes_ready = pd.DataFrame(data=routes_ready)
+    # Save dataframe to CSV
+    print("Storing dataframe in CSV file...")    
 
-# Save dataframe to CSV
-print("Storing dataframe in CSV file...")
-
-from utils.storers import CSVStorer
-
-CSVStorer("routes_ready", routes_ready).store()
-    
-print("Done!")
+    CSVStorer("routes_ready", routes_ready).store()
+        
+    print("Done!")
