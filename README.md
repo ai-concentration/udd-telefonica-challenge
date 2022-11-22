@@ -8,6 +8,9 @@
 	- Carlos Alberto Hurtado Sanchez A01700885
 	- Kevin Joan Delgado Pérez A01706328
 	- Wenguang hu A01706648
+----------------------------------------------------------------------------------------------------------------------------------------------------
+CRISP-DM phases:
+https://github.com/ai-concentration/udd-telefonica-challenge/blob/GerardoA01701474-patch-1/Diagrama%20CRISPDM.png
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 ## Feedback: Reto Documentation
