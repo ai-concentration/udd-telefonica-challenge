@@ -18,7 +18,7 @@ time_num = 24
 time_interval = all_day_seconds / time_num
 
 #set top N comuna to display
-top_num = 10
+top_num = 19
 display_comunas = list(df_trip['destination'].value_counts().head(top_num).to_dict().keys())
 
 #create the matrix to save the count of trip for each comuna and each hour
@@ -28,6 +28,8 @@ list_comuna_trip = []
 #create count for each comuna
 for comuna in display_comunas:
     dict_comuna_trip_temp[comuna] = 0
+#Add others
+dict_comuna_trip_temp['others'] = 0    
 
 #create count for each hour
 for count in range(time_num):
@@ -37,14 +39,15 @@ for count in range(time_num):
 time_list = df_trip['end_time'].tolist()
 comuna_list = df_trip['destination'].tolist()
 
-#create the matrix
 for count in range(trip_num):
     comuna = comuna_list[count]
+    time = time_list[count]
+    time_index = int(time // time_interval)
 
-    if(comuna in display_comunas):
-        time = time_list[count]
-        time_index = int(time // time_interval)
+    if(comuna in display_comunas):        
         (list_comuna_trip[time_index])[comuna] += 1
+    else:        
+        (list_comuna_trip[time_index])['others'] += 1
 
 #for animation
 labels = list(list_comuna_trip[0].keys())
@@ -64,7 +67,7 @@ def animate(count):
     #colors = cmap(np.linspace(0, 1, len(labels)))
 
     #ax.pie(values, labels=labels, colors=colors)
-    ax.pie(values, labels=labels )
+    ax.pie(values, labels=labels, autopct='%1.1f%%')
     #plt.legend(title = "Comunas:", loc='lower center', ncols=4, bbox_to_anchor = (0.5,-0.5))
 
 # run the animation
