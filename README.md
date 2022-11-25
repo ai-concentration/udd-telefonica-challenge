@@ -8,6 +8,13 @@
 	- Carlos Alberto Hurtado Sanchez A01700885
 	- Kevin Joan Delgado Pérez A01706328
 	- Wenguang hu A01706648
+----------------------------------------------------------------------------------------------------------------------------------------------------
+CRISP-DM phases:
+https://github.com/ai-concentration/udd-telefonica-challenge/blob/GerardoA01701474-patch-1/Diagrama_CRISPDM.png
+
+- At the beginning, we wanted to generate clusters in order to classify between types of trips (type of transportation, reason of the trip, etc.)
+but we decided not to train a k-means model due to scatter plots indicating the presence of messy and dense single chunks instead of the expected and desired  clusters
+
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 ## Feedback: Reto Documentation
@@ -57,6 +64,25 @@ Inside the folder called CRISP-DM in Reto2 you will find:
 	software that will be used to solve the challenge.
 	- This folder also contains some auxiliary files generated for data management
 ----------------------------------------------------------------------------------------------------------------------------------------------------
+## Models2.ipynb
+In this document is a deeper explanation for the models and the decisions taken: 
+https://docs.google.com/document/d/1JN3yrL40wKIZF2NxIs0wxvXpS2e1mmdnepEdiSKPhIA/edit?usp=share_link 
+
+This NoteBook has the 4 models generated for the solution for the Reto:
+- 1st Benchmark Model:
+	- It is a logistic Regression. We took this baseline model to have a start point and try to improve the performance of the simpliest solution
+- 2nd Benchmark Model:
+	- It is a Neural Network. We tried to use deeplearning architecture but we came to conclusion that this kind of models are not strong enough to solve
+	our problem
+	
+- 3th Model:
+	- It is a random forest. We went for a different approach and used a machine learning architecture, it gave us better results, but still not good enough
+- last and selected model:
+	- It is a decision tree with XGBoost. With this model we got the higher accuracy score, and after several metrics we decided that this is a good solution
+	for the problem we want to solve
+
+----------------------------------------------------------------------------------------------------------------------------------------------------
+
 ## Matrix.py 
 
 This python file takes the dataset 'routes_ready.csv' and adds the name of the comuna where each connection took place.
