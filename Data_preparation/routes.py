@@ -4,7 +4,7 @@ import numpy as np
 
 from pathlib import Path
 
-from utils.constants import DECIMALS, DATA_DTYPE, JSON_DIR, DATA_DIR, KM_TO_M
+from utils.constants import DECIMALS, JSON_DIR, DATA_DIR, KM_TO_M
 
 # Loading the dataset
 print("Loading dataset...")
@@ -59,17 +59,6 @@ dataset["antenna id"] = dataset["antenna id"].astype(np.int64)
 MIN_ANTENNA_ID = dataset["antenna id"].min()
 
 dataset["antenna id"] -= MIN_ANTENNA_ID
-
-print("Done!")
-
-# Update lat and lon columns to be integers
-print("Converting float columns to integer columns...")
-
-dataset["lat"] *= 10 ** DECIMALS
-dataset["lon"] *= 10 ** DECIMALS
-
-dataset["lat"] = dataset["lat"].astype(np.int64)
-dataset["lon"] = dataset["lon"].astype(np.int64)
 
 print("Done!")
 
