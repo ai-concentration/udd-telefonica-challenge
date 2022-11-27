@@ -7,18 +7,8 @@ from pathlib import Path
 from collections import defaultdict, deque
 
 from latlon_tools import distance_km
-from utils.constants import DATA_DIR, DECIMALS, CHUNKSIZE
+from utils.constants import DATA_DIR, DECIMALS, CHUNKSIZE, DTYPE_UPDATED_DF
 from utils.storers import CSVStorer
-
-# Specify types of columns
-DTYPE = {
-    "PHONE_ID": "string",
-    "bts_id": "string",
-    "antenna id": np.int64,
-    "timestamp": np.int64,
-    "lat": np.float64,
-    "lon": np.float64
-}
 
 
 def groupby_antenna_id(dataset_chunk):
@@ -119,7 +109,7 @@ if __name__ == "__main__":
 
     dataset_it = pd.read_csv(
         DATA_DIR / "updated_data.csv",
-        dtype=DTYPE,
+        dtype=DTYPE_UPDATED_DF,
         chunksize=CHUNKSIZE,
         # nrows=1e6  # Limit number of rows for testing purposes
     )
