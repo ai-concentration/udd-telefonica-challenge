@@ -36,7 +36,7 @@ def get_comunas_bts_dict(antenna_df, comunas_geodata):
     antenna_df["comuna"] = antenna_df["comuna"].str.lower()  # Lower case for easier processing later
 
     # Sort by bts_id in descending order
-    antenna_df.sort_values(by=["comuna", "antenna id"], inplace=True, ascending=True)
+    antenna_df.sort_values(by="antenna id", inplace=True, ascending=True)
 
     # Store antenna geolocation dataframe
     CSVStorer("antenna_geolocation", antenna_df).store()
