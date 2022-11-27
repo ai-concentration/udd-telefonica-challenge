@@ -4,10 +4,10 @@ import numpy as np
 import multiprocessing as mp
 
 from pathlib import Path
-from collections import defaultdict
+from collections import defaultdict, deque
 
 from latlon_tools import distance_km
-from utils.constants import DATA_DIR, DECIMALS
+from utils.constants import DATA_DIR, DECIMALS, CHUNKSIZE
 from utils.storers import CSVStorer
 
 # Specify types of columns
@@ -16,16 +16,13 @@ DTYPE = {
     "bts_id": "string",
     "antenna id": np.int64,
     "timestamp": np.int64,
-    "lat": np.int64,
-    "lon": np.int64
+    "lat": np.float64,
+    "lon": np.float64
 }
-
-# Specify dataframe iterator chunk size
-CHUNKSIZE = 1e5
 
 
 def groupby_antenna_id(dataset_chunk):
-    values = []
+    values = deque()
     columns = [
         "phone id", "antenna id",
         "start", "stop",
@@ -61,11 +58,11 @@ def groupby_antenna_id(dataset_chunk):
         timestamp_nxt = dataset_chunk["timestamp"][i]
 
         # Get lat and lon values
-        lat_r = dataset_chunk["lat"][r] / 10 ** DECIMALS
-        lat_nxt = dataset_chunk["lat"][i] / 10 ** DECIMALS
+        lat_r = dataset_chunk["lat"][r]
+        lat_nxt = dataset_chunk["lat"][i]
 
-        lon_r = dataset_chunk["lon"][r] / 10 ** DECIMALS
-        lon_nxt = dataset_chunk["lon"][i] / 10 ** DECIMALS
+        lon_r = dataset_chunk["lon"][r]
+        lon_nxt = dataset_chunk["lon"][i]
 
         # Determine if a next antenna ID is different from current
         jumped = antenna_id_nxt != antenna_id_r
@@ -124,7 +121,7 @@ if __name__ == "__main__":
         DATA_DIR / "updated_data.csv",
         dtype=DTYPE,
         chunksize=CHUNKSIZE,
-        # nrows=1e6
+        # nrows=1e6  # Limit number of rows for testing purposes
     )
 
     print("Done!")
