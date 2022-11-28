@@ -27,7 +27,7 @@ dataset["timestamp"] = pd.to_datetime(
 )
 
 dataset["timestamp"] = dataset["timestamp"] - dataset["timestamp"][0]
-dataset["timestamp"] = dataset["timestamp"].dt.total_seconds().astype(int)
+dataset["timestamp"] = dataset["timestamp"].dt.total_seconds().astype(np.int64)
 
 # Get min value from timestamp time dummies
 MIN_TIME_DUMMY = dataset["timestamp"].min()
@@ -40,25 +40,10 @@ print("Done!")
 # Add ID per antena based on distance between lat and lon random pair
 print("Computing ID for every antena...")
 
-LAT_LON_ORIGIN = (dataset["lat"][0], dataset["lon"][0])
-EARTH_RADIUS = 6371  # In kilometers
-
-lat_rad = np.radians(dataset["lat"])
-lon_rad = np.radians(dataset["lon"])
-
-lat_delta = lat_rad - LAT_LON_ORIGIN[0]
-lon_delta = lon_rad - LAT_LON_ORIGIN[1]
-
-arc = np.sin(lat_delta / 2) ** 2 + np.cos(LAT_LON_ORIGIN[0]) \
-    * np.sin(lon_delta / 2) ** 2 * np.cos(lat_rad)
-
-dataset["antenna id"] = 2 * EARTH_RADIUS * np.arctan2(np.sqrt(arc), np.sqrt(1 - arc))
-dataset["antenna id"] *= KM_TO_M
+dataset["antenna id"] = dataset["lat"] - dataset["lon"]
+dataset["antenna id"] *= 10 ** DECIMALS
 dataset["antenna id"] = dataset["antenna id"].astype(np.int64)
-
-MIN_ANTENNA_ID = dataset["antenna id"].min()
-
-dataset["antenna id"] -= MIN_ANTENNA_ID
+dataset["antenna id"] -= dataset["antenna id"].min()
 
 print("Done!")
 
