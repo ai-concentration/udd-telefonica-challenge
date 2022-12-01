@@ -17,7 +17,17 @@
 	- We specify what the selected tools will be used for
 	- We defined a storage model for the datasets
 	- We made a process of cross-validation for the selected model
-- 
+	- We added more reasons of why we do not consider our data as bigdata
+- Feedback for Privacidad:
+	- Added references
+- Feedback for Reto Modelo y Refinamiento:
+	- We made a benchmark model
+	- We selected a model
+	- We tuned the model to get a better performance 
+- Feedback for Reto Evaluación:
+	- We added new metrics to be sure that the model meets the success criteria and interpret the results
+	- Added a confusion matrix
+	- Added cross-validation
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 CRISP-DM phases:
 https://github.com/ai-concentration/udd-telefonica-challenge/blob/GerardoA01701474_possibles_branch/CRISPDM_diagram.png
