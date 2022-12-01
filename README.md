@@ -10,11 +10,12 @@
 	- Wenguang hu A01706648
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 CRISP-DM phases:
-https://github.com/ai-concentration/udd-telefonica-challenge/blob/GerardoA01701474-patch-1/Diagrama_CRISPDM.png
+https://github.com/ai-concentration/udd-telefonica-challenge/blob/GerardoA01701474_possibles_branch/CRISPDM.png
 
 - At the beginning, we wanted to generate clusters in order to classify between types of trips (type of transportation, reason of the trip, etc.)
 but we decided not to train a k-means model due to scatter plots indicating the presence of messy and dense single chunks instead of the expected and desired  clusters
-
+- Then we realised that the information we were using was not enough so added some new data and start a new iteration in the crisp DM process
+ 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 ## Feedback: Reto Documentation
