@@ -93,7 +93,7 @@ Inside the folder called CRISP-DM in Reto2 you will find:
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 ## Models2.ipynb
 In this document is a deeper explanation for the models and the decisions taken: 
-https://docs.google.com/document/d/1JN3yrL40wKIZF2NxIs0wxvXpS2e1mmdnepEdiSKPhIA/edit?usp=share_link 
+https://docs.google.com/document/d/1pgwLDv1V6-h7vSdgM25jIhBqqKcpQVv_5Flkflj_zYI/edit?usp=share_link 
 
 This NoteBook has the 4 models generated for the solution for the Reto:
 - 1st Benchmark Model:
