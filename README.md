@@ -77,9 +77,12 @@ This NoteBook has the 4 models generated for the solution for the Reto:
 	
 - 3th Model:
 	- It is a random forest. We went for a different approach and used a machine learning architecture, it gave us better results, but still not good enough
-- last and selected model:
+- 4th Model:
 	- It is a decision tree with XGBoost. With this model we got the higher accuracy score, and after several metrics we decided that this is a good solution
 	for the problem we want to solve
+- Last and selected Model:
+	- It is a similar architecture than the previous model, but with some tuning in the hyperparameters and using a dataset with more information 
+	(amount of recreation centers and population of each comuna)
 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 
