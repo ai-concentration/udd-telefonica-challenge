@@ -7,6 +7,17 @@
 	- Gerardo Peña Pérez A01701474
 	- Kevin Joan Delgado Pérez A01706328
 	- Wenguang hu A01706648
+---------------------------------------------------------------------------------------------------------------------------------------------------
+### Corrections after feedback:
+- Feedback for Reto Documentation:
+	- Now all the documents are in a single language
+	- Every phase of the process has documentation
+	- We organized the repository in folders to facilitate navigation
+- Feedback for Reto Datos:
+	- We specify what the selected tools will be used for
+	- We defined a storage model for the datasets
+	- We made a process of cross-validation for the selected model
+- 
 ----------------------------------------------------------------------------------------------------------------------------------------------------
 CRISP-DM phases:
 https://github.com/ai-concentration/udd-telefonica-challenge/blob/GerardoA01701474_possibles_branch/CRISPDM_diagram.png
@@ -17,7 +28,7 @@ but we decided not to train a k-means model due to scatter plots indicating the 
  
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------
-## Feedback: Reto Documentation
+## Reto Documentation
 https://drive.google.com/drive/folders/12ECv0qVQ6qV_3E2VJsSBZK5w1__2-KaN?usp=share_link 
 Inside the folder called CRISP-DM in Reto2 you will find new folders:
 - Business Understanding:
@@ -37,7 +48,7 @@ Inside the folder called CRISP-DM in Reto2 you will find new folders:
 - Deployment:
 	- Contains the Final Report, the Delivery Plan and the Experience Documentation
 -----------------------------------------------------------------------------------------------------------------------------------------------------
-## Feedback: Reto Security
+## Reto Security
 https://docs.google.com/document/d/19bzXYv0qmKwh5fwQ419PEu9nYqN7SvClEHKyyjYAtAc/edit?usp=sharing
 Inside the Data preparation in Google drive, you will find:
 
@@ -45,7 +56,7 @@ Inside the Data preparation in Google drive, you will find:
 	- Contains information that is relevant the process of security that the team and the socio formador do in terms of propposal to the Reto.
 	- This folder only contains a document with all the points to answer.
 -----------------------------------------------------------------------------------------------------------------------------------------------------
-## Feedback: Reto Data
+## Reto Data
 https://docs.google.com/document/d/1OKse4OCg9Cg-0ZdUdqQauTMbn7EcfO73dvcSvLNCciY/edit?usp=sharing
 The Data preparation section includes:
 
@@ -56,7 +67,7 @@ The Data preparation section includes:
 	- Does the project use Big data?
 	
 -----------------------------------------------------------------------------------------------------------------------------------------------
-## Feedback: Reto Metodology 
+## Reto Metodology 
 https://drive.google.com/drive/folders/1p9R4YdBi9gdW8mukZyk7JRWFNDUAqrAt?usp=sharing
 Inside the folder called CRISP-DM in Reto2 you will find:
 
