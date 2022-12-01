@@ -19,18 +19,24 @@ but we decided not to train a k-means model due to scatter plots indicating the 
 
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 ## Feedback: Reto Documentation
-https://drive.google.com/drive/folders/1p9R4YdBi9gdW8mukZyk7JRWFNDUAqrAt?usp=share_link
+https://drive.google.com/drive/folders/12ECv0qVQ6qV_3E2VJsSBZK5w1__2-KaN?usp=share_link 
 Inside the folder called CRISP-DM in Reto2 you will find new folders:
-
+- Business Understanding:
+	- Contains the business objectives and data mining objectives. There is described the success criteria of the project
 - Data Understanding:
 	- Contains all the details of the data used to make new information or inferences of the study cases.
 	- This folder just contains the document with the sections of data understanding and the adjusts with CRISP-DM.
 - Data preparation:
-	- Contains all the process that the team do to get the matrix of origin destiny for count the tracks of the phone_id.
+	- Contains all the process that the team do to get the matrix of origin destiny for count the tracks of the phone_id. And a description of the privacy of the
+	 data in the project
 	- This folder just contains the document with the sections of data preparation and the adjusts with CRISP-DM.
 - Modeling:
 	- Contains information that is relevant for choosing a model to get the objetives of data mining.
 	- This folder just contains the document with the sections of data modeling and the adjusts with CRISP-DM.
+- Evaluation:
+	- Contains the review of the process CRISP_DM, and a list of metrics to detemine if the model is correct
+- Deployment:
+	- Contains the Final Report, the Delivery Plan and the Experience Documentation
 -----------------------------------------------------------------------------------------------------------------------------------------------------
 ## Feedback: Reto Security
 https://docs.google.com/document/d/19bzXYv0qmKwh5fwQ419PEu9nYqN7SvClEHKyyjYAtAc/edit?usp=sharing
